@@ -529,26 +529,47 @@
             <button onclick="updateChart()">Update</button>
           </div>
     </div>
-    <div id="chart9" style="width: 100%; height: 600px;"></div>
+    <div id="chart9" style="width: 100%; height: 500px;"></div>
+    <div id="map9" style="width: 50%; height: 400px; margin-top: 40px;"></div>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script>
         let rawDataGlobal = []; // 暫存原始資料
         let columnsGlobal = [];
+        let geoLayer = null; // 地圖圖層暫存
+        let map; // Leaflet 地圖物件
 
+        Promise.all([
+            fetch("data_9.json").then(r => r.json()),
+            fetch("map.geo.json").then(r => r.json())
+        ]).then(([jsonData, geoData]) => {
+            columnsGlobal = jsonData.columns;
+            rawDataGlobal = jsonData.data;
 
-        fetch("data_9.json")
-            .then(response => response.json())
-            .then(jsonData => {
-                columnsGlobal = jsonData.columns; // 取出所有災情指標
-                rawDataGlobal = jsonData.data;    // 取出所有地點數據
-                
-                // 計算未加權的 avg_severity
-                rawDataGlobal.forEach(d => {
+            // 計算 avg_severity
+            rawDataGlobal.forEach(d => {
                 d.avg_severity = columnsGlobal.reduce((sum, key) => sum + d[key], 0) / columnsGlobal.length;
-                });
-
-                // 畫圖
-                plotBarChart(rawDataGlobal, "avg_severity");
             });
+
+            // 初始化長條圖與地圖
+            plotBarChart(rawDataGlobal, "avg_severity");
+            initMap(geoData);
+            updateMap("avg_severity"); // 初始顯示 avg_severity
+        })
+        // fetch("data_9.json")
+        //     .then(response => response.json())
+        //     .then(jsonData => {
+        //         columnsGlobal = jsonData.columns; // 取出所有災情指標
+        //         rawDataGlobal = jsonData.data;    // 取出所有地點數據
+                
+        //         // 計算未加權的 avg_severity
+        //         rawDataGlobal.forEach(d => {
+        //         d.avg_severity = columnsGlobal.reduce((sum, key) => sum + d[key], 0) / columnsGlobal.length;
+        //         });
+
+        //         // 畫圖
+        //         plotBarChart(rawDataGlobal, "avg_severity");
+        //     });
 
         function plotBarChart(data, key) {
             const sorted = [...data].sort((a, b) => b[key] - a[key]);
@@ -556,11 +577,16 @@
             const locations = sorted.map(d => d.location);
             const values = sorted.map(d => d[key]);
 
+             // 使用 getColor 函數生成顏色陣列（與地圖一致）
+            const barColors = sorted.map(d => getColor(d[key]));
+
             const trace = {
                 x: locations,
                 y: values,
                 type: "bar",
-                marker: { color: "salmon" }
+                marker: { color: barColors },
+                opacity: 0.7,
+               
             };
 
             const layout = {
@@ -572,35 +598,110 @@
             Plotly.newPlot("chart9", [trace], layout);
         }
 
-        function updateChart() {
-            fetch("data_9.json")
-                .then(response => response.json())
-                .then(jsonData => {
-                    // const columns = jsonData.columns;
-                    // const rawData = jsonData.data;
+        function initMap(geojson) {
+            map = L.map("map9").setView([0, 0], 13); // 之後會自動 fit bounds
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: 'Map data © OpenStreetMap contributors'
+            }).addTo(map);
 
-                    // 讀取使用者輸入的權重
-                    const weights = {};
-                    columnsGlobal.forEach(key => {
-                        weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
-                    });
+            geoLayer = L.geoJson(geojson, {
+                style: feature => ({
+                fillColor: "#ccc",
+                color: "#333",
+                weight: 1,
+                fillOpacity: 0.6
+                }),
+                onEachFeature: (feature, layer) => {
+                layer.bindTooltip(`Location ${feature.properties.Id}`);
+                }
+            }).addTo(map);
 
-                    // 計算加權綜合受灾评分
-                    rawDataGlobal.forEach(d => {
-                        let totalWeight = 0;
-                        let weightedSum = 0;
-
-                        columnsGlobal.forEach(key => {
-                            totalWeight += weights[key];
-                            weightedSum += d[key] * weights[key];
-                        });
-
-                        d.weighted_score = weightedSum / totalWeight;
-                    });
-
-                    plotBarChart(rawDataGlobal, "weighted_score");
-                });
+            map.fitBounds(geoLayer.getBounds());
         }
+
+        function updateMap(key) {
+            geoLayer.eachLayer(layer => {
+                const id = layer.feature.properties.Id;
+                const match = rawDataGlobal.find(d => d.location === id);
+                const score = match ? match[key] : 0;
+
+                // 改變樣式
+                layer.setStyle({
+                    fillColor: getColor(score),
+                    fillOpacity: 0.7,
+                    color: "#555",
+                    weight: 1
+                });
+
+                layer.setTooltipContent(`Location ${id}<br>Score: ${score.toFixed(2)}`);
+
+            })
+        }
+
+        // 顏色比例（你可以調整色階）
+        function getColor(score) {
+            return score > 7 ? "#800026" :
+                    score > 6 ? "#BD0026" :
+                    score > 5 ? "#E31A1C" :
+                    score > 4 ? "#FC4E2A" :
+                    score > 3 ? "#FD8D3C" :
+                    score > 2 ? "#FEB24C" :
+                    score > 1 ? "#FED976" :
+                                "#FFEDA0";
+        }
+        function updateChart() {
+            // 讀取使用者輸入的權重
+            const weights = {};
+                columnsGlobal.forEach(key => {
+                    weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
+            });
+
+            // 計算加權綜合受灾评分
+            rawDataGlobal.forEach(d => {
+                let totalWeight = 0;
+                let weightedSum = 0;
+
+                columnsGlobal.forEach(key => {
+                totalWeight += weights[key];
+                weightedSum += d[key] * weights[key];
+                });
+
+                d.weighted_score = weightedSum / totalWeight;
+            });
+
+                // 同步更新長條圖與地圖
+                plotBarChart(rawDataGlobal, "weighted_score");
+                updateMap("weighted_score");
+        }
+        // function updateChart() {
+        //     fetch("data_9.json")
+        //         .then(response => response.json())
+        //         .then(jsonData => {
+        //             // const columns = jsonData.columns;
+        //             // const rawData = jsonData.data;
+
+        //             // 讀取使用者輸入的權重
+        //             const weights = {};
+        //             columnsGlobal.forEach(key => {
+        //                 weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
+        //             });
+
+        //             // 計算加權綜合受灾评分
+        //             rawDataGlobal.forEach(d => {
+        //                 let totalWeight = 0;
+        //                 let weightedSum = 0;
+
+        //                 columnsGlobal.forEach(key => {
+        //                     totalWeight += weights[key];
+        //                     weightedSum += d[key] * weights[key];
+        //                 });
+
+        //                 d.weighted_score = weightedSum / totalWeight;
+        //             });
+
+        //             plotBarChart(rawDataGlobal, "weighted_score");
+        //         });
+        // }
         function applySuggestedWeights() {
             const suggested = {
                 power: 2.0,
