@@ -66,298 +66,578 @@
 </header>
 
 <div class="container">
-  <h2>Team Information</h2>
-<ul>
-  <li><strong>Team Members:</strong> Zhenqi Huang, Hsiang-Hsiang Tsai, Zhengyu Xue and Tang Wenlong / Student</li>
-  <li><strong>Primary Contact:</strong> psxzh6@nottingham.ac.uk</li>
-  <li><strong>Student Team:</strong> YES</li>
-</ul>
+    <h2>Team Information</h2>
+    <ul>
+    <li><strong>Team Members:</strong> Zhenqi Huang, Hsiang-Hsiang Tsai, Zhengyu Xue and Tang Wenlong / Student</li>
+    <li><strong>Primary Contact:</strong> psxzh6@nottingham.ac.uk</li>
+    <li><strong>Student Team:</strong> YES</li>
+    </ul>
 
-<h2>Tools Used</h2>
-<ul>
-  <li>HTML</li>
-  <li>CSS</li>
-  <li>JavaScript</li>
-  <li>Python</li>
-</ul>
+    <h2>Tools Used</h2>
+    <ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+    <li>Python</li>
+    </ul>
 
-  <h2>1. Project Background and Objectives</h2>
-  <p>This project is based on the simulated post-earthquake emergency response in the city of St. Himark. By conducting in-depth analysis of disaster reports submitted by residents, we aim to provide data-driven support for government departments in rescue coordination and resource allocation.</p>
-  <p>The analysis focuses on three core tasks:</p>
-  <ul>
-    <li><strong>1）Formulating Emergency Response Recommendations:</strong> By evaluating the severity of disasters across different communities, the project identifies the most severely affected areas to guide the prioritization of emergency resources and personnel deployment.</li>
-    <li><strong>2）Uncertainty Analysis of Reported Data:</strong> Based on assessments of data completeness and consistency, a reliability score is proposed for each community's reports, enabling decision-makers to gauge data credibility and avoid misjudgments caused by erroneous inputs.</li>
-    <li><strong>3）Temporal Evolution of Disaster Severity:</strong> Using time series analysis techniques, the project investigates the temporal dynamics of the disaster, identifies the mainshock and aftershock periods, and provides insights to inform phased emergency response strategies.</li>
-  </ul>
-  
-  <h2>2. Data Missingness Handling and Cleaning Strategy</h2>
-  <p>To ensure the reliability of data analysis, this project adopts differentiated approaches for handling missing values based on the characteristics and missing rates of each field, as detailed below:</p>
-
-  <ul>
-    <li><strong>1） Creating Indicator Variables:</strong> For fields with a high proportion of missing values, such as <code>medical</code>, a Boolean variable <code>medical_reported</code> is introduced, where a value of 1 indicates a valid report and 0 indicates missing data. This approach retains the significance of missingness while allowing the variable to be explicitly considered in subsequent analyses.</li>
-    <li><strong>2） Median Imputation by Community:</strong> For the field <code>shake_intensity</code>, which exhibits a moderate level of missingness and structural differences across communities, median imputation is applied separately within each community.</li>
-     <li><strong>3） Global Median Imputation:</strong> For fields with very low missing rates, such as <code>buildings</code> and <code>sewer_and_water</code>, global median values are used for imputation to avoid introducing significant bias.</li>
-  </ul>
-<p><strong>Summary:</strong> This cleaning strategy strikes a balance between preserving the integrity of the original data and enhancing completeness, laying a solid foundation for subsequent modeling and visualization.</p>
+    <h2>1. Project Background and Objectives</h2>
+    <p>This project is based on the simulated post-earthquake emergency response in the city of St. Himark. By conducting in-depth analysis of disaster reports submitted by residents, we aim to provide data-driven support for government departments in rescue coordination and resource allocation.</p>
+    <p>The analysis focuses on three core tasks:</p>
+    <ul>
+        <li><strong>1）Formulating Emergency Response Recommendations:</strong> By evaluating the severity of disasters across different communities, the project identifies the most severely affected areas to guide the prioritization of emergency resources and personnel deployment.</li>
+        <li><strong>2）Uncertainty Analysis of Reported Data:</strong> Based on assessments of data completeness and consistency, a reliability score is proposed for each community's reports, enabling decision-makers to gauge data credibility and avoid misjudgments caused by erroneous inputs.</li>
+        <li><strong>3）Temporal Evolution of Disaster Severity:</strong> Using time series analysis techniques, the project investigates the temporal dynamics of the disaster, identifies the mainshock and aftershock periods, and provides insights to inform phased emergency response strategies.</li>
+    </ul>
     
+    <h2>2. Data Missingness Handling and Cleaning Strategy</h2>
+    <p>To ensure the reliability of data analysis, this project adopts differentiated approaches for handling missing values based on the characteristics and missing rates of each field, as detailed below:</p>
 
-<h2>3. Data Reliability Analysis</h2>
-<p>The following section presents visualizations of reliability scores across different communities:</p>
-<p><strong> Ordered by location:</strong></p>
-<canvas id="reliabilityChart1" height="300"></canvas>
-<p><strong> Ordered by score magnitude:</strong></p>
-<canvas id="reliabilityChart2" height="300"></canvas>
-<p>Each community (Location) is assigned a "data reliability score." Taller bars indicate that the community has submitted more reports with lower missing rates, implying more complete information and higher data credibility. Shorter bars suggest fewer reports or higher missing rates, indicating that caution should be exercised when referencing data from these communities. Notably, Community 3 stands out with significantly higher data quality compared to others, whereas Communities 7, 13, and 17 received relatively low scores and should be considered carefully in decision-making processes.</p>
-<div id="heatmapChart" height="300"></div>
-<p><strong>Overall data quality:</strong> For most communities and the majority of indicators, data completeness is very high, suggesting that the information can be reliably used for disaster assessment and decision-making.<br>
-<strong>Missing critical indicators:</strong> In some communities, key fields such as <code>roads_and_bridges</code> or <code>sewer_and_water</code> are almost entirely unreported, introducing uncertainty in assessing the true disaster impact. Additional investigation or on-site confirmation may be required to prevent overlooking actual conditions.<br>
-<strong>Uneven reporting of seismic intensity:</strong> The completeness rate of <code>shake_intensity</code> varies significantly across communities, indicating that some communities actively reported detailed seismic information, while others submitted very few or no entries, making it difficult to accurately evaluate the level of ground shaking in those regions.</p>
+    <ul>
+        <li><strong>1） Creating Indicator Variables:</strong> For fields with a high proportion of missing values, such as <code>medical</code>, a Boolean variable <code>medical_reported</code> is introduced, where a value of 1 indicates a valid report and 0 indicates missing data. This approach retains the significance of missingness while allowing the variable to be explicitly considered in subsequent analyses.</li>
+        <li><strong>2） Median Imputation by Community:</strong> For the field <code>shake_intensity</code>, which exhibits a moderate level of missingness and structural differences across communities, median imputation is applied separately within each community.</li>
+        <li><strong>3） Global Median Imputation:</strong> For fields with very low missing rates, such as <code>buildings</code> and <code>sewer_and_water</code>, global median values are used for imputation to avoid introducing significant bias.</li>
+    </ul>
+    <p><strong>Summary:</strong> This cleaning strategy strikes a balance between preserving the integrity of the original data and enhancing completeness, laying a solid foundation for subsequent modeling and visualization.</p>
+        
 
-  <script>
-    const reliabilityData1 = {
-      labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'],
-      datasets: [{
-        label: 'Reliability Score',
-        data: [996.03, 2196.76, 12636.4, 1255.98, 1342.87, 2225.2, 36.26, 6014.12, 7828.16, 927.01, 2621.61, 1492.66, 409.59, 2774.85, 1881.02, 1690.05, 730.65, 1951.31, 592.89],
-        backgroundColor: 'rgba(135, 206, 235, 0.6)'
-      }]
-    };
-    new Chart(document.getElementById("reliabilityChart1"), {
-      type: 'bar',
-      data: reliabilityData1,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: { beginAtZero: true }
+    <h2>3. Data Reliability Analysis</h2>
+    <p>The following section presents visualizations of reliability scores across different communities:</p>
+    <p><strong> Ordered by location:</strong></p>
+    <canvas id="reliabilityChart1" height="300"></canvas>
+    <p><strong> Ordered by score magnitude:</strong></p>
+    <canvas id="reliabilityChart2" height="300"></canvas>
+    <p>Each community (Location) is assigned a "data reliability score." Taller bars indicate that the community has submitted more reports with lower missing rates, implying more complete information and higher data credibility. Shorter bars suggest fewer reports or higher missing rates, indicating that caution should be exercised when referencing data from these communities. Notably, Community 3 stands out with significantly higher data quality compared to others, whereas Communities 7, 13, and 17 received relatively low scores and should be considered carefully in decision-making processes.</p>
+    <div id="heatmapChart" height="300"></div>
+    <p><strong>Overall data quality:</strong> For most communities and the majority of indicators, data completeness is very high, suggesting that the information can be reliably used for disaster assessment and decision-making.<br>
+    <strong>Missing critical indicators:</strong> In some communities, key fields such as <code>roads_and_bridges</code> or <code>sewer_and_water</code> are almost entirely unreported, introducing uncertainty in assessing the true disaster impact. Additional investigation or on-site confirmation may be required to prevent overlooking actual conditions.<br>
+    <strong>Uneven reporting of seismic intensity:</strong> The completeness rate of <code>shake_intensity</code> varies significantly across communities, indicating that some communities actively reported detailed seismic information, while others submitted very few or no entries, making it difficult to accurately evaluate the level of ground shaking in those regions.</p>
+
+    <script>
+        const reliabilityData1 = {
+        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'],
+        datasets: [{
+            label: 'Reliability Score',
+            data: [996.03, 2196.76, 12636.4, 1255.98, 1342.87, 2225.2, 36.26, 6014.12, 7828.16, 927.01, 2621.61, 1492.66, 409.59, 2774.85, 1881.02, 1690.05, 730.65, 1951.31, 592.89],
+            backgroundColor: 'rgba(135, 206, 235, 0.6)'
+        }]
+        };
+        new Chart(document.getElementById("reliabilityChart1"), {
+        type: 'bar',
+        data: reliabilityData1,
+        options: {
+            responsive: true,
+            plugins: {
+            legend: { display: false }
+            },
+            scales: {
+            y: { beginAtZero: true }
+            }
         }
-      }
-    });
-    
-    const reliabilityData2 = {
-      labels: ['3', '9', '8', '14', '11', '6', '2', '18', '15', '16', '12', '5', '4', '1', '10', '17', '19', '13', '7'],
-      datasets: [{
-        label: 'Reliability Score',
-        data: [12636.4, 7828.16, 6014.12, 2774.85, 2621.61, 2225.2, 2196.76, 1951.31, 1881.02, 1690.05, 1492.66, 1342.87, 1255.98, 996.03, 927.01, 730.65, 592.89, 409.59, 36.26],
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
-      }]
-    };
-    new Chart(document.getElementById("reliabilityChart2"), {
-      type: 'bar',
-      data: reliabilityData2,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: { beginAtZero: true }
+        });
+        
+        const reliabilityData2 = {
+        labels: ['3', '9', '8', '14', '11', '6', '2', '18', '15', '16', '12', '5', '4', '1', '10', '17', '19', '13', '7'],
+        datasets: [{
+            label: 'Reliability Score',
+            data: [12636.4, 7828.16, 6014.12, 2774.85, 2621.61, 2225.2, 2196.76, 1951.31, 1881.02, 1690.05, 1492.66, 1342.87, 1255.98, 996.03, 927.01, 730.65, 592.89, 409.59, 36.26],
+            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        }]
+        };
+        new Chart(document.getElementById("reliabilityChart2"), {
+        type: 'bar',
+        data: reliabilityData2,
+        options: {
+            responsive: true,
+            plugins: {
+            legend: { display: false }
+            },
+            scales: {
+            y: { beginAtZero: true }
+            }
         }
-      }
+        });
+        </script>
+
+    <!-- 添加 Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+
+    <script>
+    const heatmapZ = [
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.465],
+        [1.0, 0.018, 1.0, 1.0, 1.0, 0.819],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.943],
+        [1.0, 0.018, 1.0, 1.0, 1.0, 0.923],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.781],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.664],
+        [0.017, 0.006, 1.0, 0.012, 1.0, 0.948],
+        [1.0, 0.017, 1.0, 1.0, 1.0, 0.936],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.901],
+        [1.0, 0.016, 1.0, 1.0, 1.0, 0.874],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.932],
+        [1.0, 0.015, 1.0, 1.0, 1.0, 0.929],
+        [1.0, 0.017, 1.0, 1.0, 1.0, 0.388],
+        [1.0, 0.013, 1.0, 1.0, 1.0, 0.933],
+        [1.0, 0.016, 1.0, 1.0, 1.0, 0.773],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 0.311],
+        [1.0, 0.020, 1.0, 1.0, 1.0, 0.889],
+        [1.0, 0.015, 1.0, 1.0, 1.0, 0.921],
+        [1.0, 0.015, 1.0, 1.0, 1.0, 0.741]
+    ];
+    const xLabels = ['buildings', 'medical', 'power', 'roads_and_bridges', 'sewer_and_water', 'shake_intensity'];
+    const yLabels = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'];
+
+    const annotations = [];
+    for (let i = 0; i < yLabels.length; i++) {
+        for (let j = 0; j < xLabels.length; j++) {
+        annotations.push({
+            x: xLabels[j],
+            y: yLabels[i],
+            text: String(heatmapZ[i][j]),
+            font: { color: 'black', size: 12 },
+            showarrow: false
+        });
+        }
+    }
+
+    const trace = {
+        z: heatmapZ,
+        x: xLabels,
+        y: yLabels,
+        type: 'heatmap',
+        colorscale: 'YlGnBu',
+        showscale: true
+    };
+
+    const layout = {
+        title: 'Heat map of the completeness rate of each indicator in each community (including numerical values)',
+        annotations: annotations,
+        xaxis: { title: 'Data' },
+        yaxis: { title: 'Location', autorange: 'reversed' },
+        margin: { l: 80, r: 30, t: 50, b: 50 }
+    };
+
+    Plotly.newPlot('heatmapChart', [trace], layout, {
+        displaylogo: false
     });
     </script>
 
-<!-- 添加 Plotly CDN -->
-<script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <h2>4. Analysis of Missing Data Rates Over Time</h2>
+    <p>We selected six key disaster-related indicators (power, medical, roads_and_bridges, buildings, shake_intensity, sewer_and_water) and plotted the trend of their missing data rates over time.</p>
+    <ul>
+    <li><strong>Stable fields:</strong> The missing rates for <code>buildings</code> and <code>sewer_and_water</code> consistently remained below 5% with minimal fluctuation, indicating a stable reporting pattern.</li>
+    <li><strong>Volatile fields:</strong> The missing rates for <code>power</code>, <code>roads_and_bridges</code>, and <code>medical</code> spiked noticeably during the mainshock and aftershock periods, suggesting that infrastructure disruptions may have impaired reporting capabilities.</li>
+    <li><strong>Case in point:</strong> Around 03:00 on April 8, the missing rate for <code>medical</code> surged to 0.42, which aligns with a likely breakdown of the hospital reporting systems immediately following the earthquake.</li>
+    </ul>
 
-<script>
-  const heatmapZ = [
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.465],
-    [1.0, 0.018, 1.0, 1.0, 1.0, 0.819],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.943],
-    [1.0, 0.018, 1.0, 1.0, 1.0, 0.923],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.781],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.664],
-    [0.017, 0.006, 1.0, 0.012, 1.0, 0.948],
-    [1.0, 0.017, 1.0, 1.0, 1.0, 0.936],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.901],
-    [1.0, 0.016, 1.0, 1.0, 1.0, 0.874],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.932],
-    [1.0, 0.015, 1.0, 1.0, 1.0, 0.929],
-    [1.0, 0.017, 1.0, 1.0, 1.0, 0.388],
-    [1.0, 0.013, 1.0, 1.0, 1.0, 0.933],
-    [1.0, 0.016, 1.0, 1.0, 1.0, 0.773],
-    [1.0, 1.0, 1.0, 1.0, 1.0, 0.311],
-    [1.0, 0.020, 1.0, 1.0, 1.0, 0.889],
-    [1.0, 0.015, 1.0, 1.0, 1.0, 0.921],
-    [1.0, 0.015, 1.0, 1.0, 1.0, 0.741]
-  ];
-  const xLabels = ['buildings', 'medical', 'power', 'roads_and_bridges', 'sewer_and_water', 'shake_intensity'];
-  const yLabels = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'];
+    <div id="missingRateChart" style="height:500px; width:100%;"></div>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <script>
+    const traceData = [{"mode": "lines", "name": "power", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "medical", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.637, 0.505, 0.505, 0.538, 0.62, 0.522, 0.526, 0.595, 0.564, 0.604, 0.545, 0.634, 0.574, 0.608, 0.51, 0.547, 0.536, 0.549, 0.606, 0.589, 0.597, 0.56, 0.569, 0.521, 0.595, 0.578, 0.602, 0.598, 0.461, 0.516, 0.629, 0.44, 0.5, 0.525, 0.589, 0.549, 0.562, 0.526, 0.562, 0.611, 0.567, 0.511, 0.574, 0.631, 0.505, 0.565, 0.652, 0.478, 0.581, 0.695, 0.573, 0.604, 0.495, 0.556, 0.64, 0.522, 0.443, 0.635, 0.801, 0.707, 0.779, 0.763, 0.747, 0.752, 0.718, 0.73, 0.686, 0.6, 0.61, 0.594, 0.557, 0.016, 0.527, 0.009, 0.482, 0.532, 0.955, 0.537, 0.552, 0.595, 0.437, 0.967, 0.594, 0.523, 0.591, 0.518, 0.557, 0.667, 0.531, 0.574, 0.479, 0.444, 0.446, 0.478, 0.509, 0.482, 0.484, 0.6, 0.958, 0.544, 0.671, 0.711, 0.494, 0.566, 0.637, 0.658, 0.541, 0.55, 0.014, 0.557, 0.591, 0.558, 0.474, 0.52, 0.535, 0.645, 0.489, 0.576, 0.522, 0.548, 0.833]}, {"mode": "lines", "name": "roads_and_bridges", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "buildings", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.008, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01, 0.004, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.004, 0.004, 0.002, 0.002, 0.0, 0.006, 0.009, 0.007, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.001, 0.002, 0.002, 0.0, 0.0, 0.0, 0.0, 0.009, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.007, 0.011, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "shake_intensity", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.78, 0.868, 0.868, 0.862, 0.861, 0.859, 0.825, 0.876, 0.812, 0.851, 0.932, 0.792, 0.894, 0.882, 0.307, 0.225, 0.106, 0.18, 0.251, 0.416, 0.56, 0.704, 0.748, 0.823, 0.75, 0.831, 0.914, 0.85, 0.888, 0.817, 0.899, 0.867, 0.82, 0.879, 0.844, 0.775, 0.843, 0.804, 0.854, 0.856, 0.789, 0.83, 0.787, 0.829, 0.838, 0.788, 0.826, 0.793, 0.756, 0.81, 0.865, 0.812, 0.887, 0.822, 0.77, 0.891, 0.053, 0.047, 0.035, 0.031, 0.046, 0.085, 0.158, 0.264, 0.292, 0.416, 0.539, 0.675, 0.74, 0.734, 0.786, 0.052, 0.865, 0.026, 0.835, 0.861, 0.059, 0.863, 0.839, 0.886, 0.803, 0.054, 0.802, 0.86, 0.785, 0.835, 0.835, 0.087, 0.111, 0.128, 0.229, 0.333, 0.442, 0.528, 0.625, 0.691, 0.774, 0.857, 0.078, 0.796, 0.849, 0.789, 0.843, 0.771, 0.841, 0.822, 0.811, 0.8, 0.036, 0.807, 0.817, 0.85, 0.821, 0.95, 0.802, 0.787, 0.809, 0.837, 0.756, 0.839, 0.667]}, {"mode": "lines", "name": "sewer_and_water", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.008, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01, 0.004, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.004, 0.004, 0.002, 0.002, 0.0, 0.006, 0.009, 0.007, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.001, 0.002, 0.002, 0.0, 0.0, 0.0, 0.0, 0.009, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.007, 0.011, 0.0, 0.0, 0.0, 0.0]}];
+    Plotly.newPlot("missingRateChart", traceData, {
+    title: "Changes in the missing rate of each indicator over time",
+    xaxis: { title: "Time" },
+    yaxis: { title: "Missing rate (0~1)", range: [0, 1] },
+    height: 500
+    }, {
+    displaylogo: false 
+    });
+    
+    </script>
 
-  const annotations = [];
-  for (let i = 0; i < yLabels.length; i++) {
-    for (let j = 0; j < xLabels.length; j++) {
-      annotations.push({
-        x: xLabels[j],
-        y: yLabels[i],
-        text: String(heatmapZ[i][j]),
-        font: { color: 'black', size: 12 },
-        showarrow: false
-      });
-    }
-  }
-
-  const trace = {
-    z: heatmapZ,
-    x: xLabels,
-    y: yLabels,
-    type: 'heatmap',
-    colorscale: 'YlGnBu',
-    showscale: true
-  };
-
-  const layout = {
-    title: 'Heat map of the completeness rate of each indicator in each community (including numerical values)',
-    annotations: annotations,
-    xaxis: { title: 'Data' },
-    yaxis: { title: 'Location', autorange: 'reversed' },
-    margin: { l: 80, r: 30, t: 50, b: 50 }
-  };
-
-  Plotly.newPlot('heatmapChart', [trace], layout, {
-    displaylogo: false
-  });
-</script>
-
-<h2>4. Analysis of Missing Data Rates Over Time</h2>
-<p>We selected six key disaster-related indicators (power, medical, roads_and_bridges, buildings, shake_intensity, sewer_and_water) and plotted the trend of their missing data rates over time.</p>
-<ul>
-  <li><strong>Stable fields:</strong> The missing rates for <code>buildings</code> and <code>sewer_and_water</code> consistently remained below 5% with minimal fluctuation, indicating a stable reporting pattern.</li>
-  <li><strong>Volatile fields:</strong> The missing rates for <code>power</code>, <code>roads_and_bridges</code>, and <code>medical</code> spiked noticeably during the mainshock and aftershock periods, suggesting that infrastructure disruptions may have impaired reporting capabilities.</li>
-  <li><strong>Case in point:</strong> Around 03:00 on April 8, the missing rate for <code>medical</code> surged to 0.42, which aligns with a likely breakdown of the hospital reporting systems immediately following the earthquake.</li>
-</ul>
-
-<div id="missingRateChart" style="height:500px; width:100%;"></div>
-<script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
-<script>
-  const traceData = [{"mode": "lines", "name": "power", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "medical", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.637, 0.505, 0.505, 0.538, 0.62, 0.522, 0.526, 0.595, 0.564, 0.604, 0.545, 0.634, 0.574, 0.608, 0.51, 0.547, 0.536, 0.549, 0.606, 0.589, 0.597, 0.56, 0.569, 0.521, 0.595, 0.578, 0.602, 0.598, 0.461, 0.516, 0.629, 0.44, 0.5, 0.525, 0.589, 0.549, 0.562, 0.526, 0.562, 0.611, 0.567, 0.511, 0.574, 0.631, 0.505, 0.565, 0.652, 0.478, 0.581, 0.695, 0.573, 0.604, 0.495, 0.556, 0.64, 0.522, 0.443, 0.635, 0.801, 0.707, 0.779, 0.763, 0.747, 0.752, 0.718, 0.73, 0.686, 0.6, 0.61, 0.594, 0.557, 0.016, 0.527, 0.009, 0.482, 0.532, 0.955, 0.537, 0.552, 0.595, 0.437, 0.967, 0.594, 0.523, 0.591, 0.518, 0.557, 0.667, 0.531, 0.574, 0.479, 0.444, 0.446, 0.478, 0.509, 0.482, 0.484, 0.6, 0.958, 0.544, 0.671, 0.711, 0.494, 0.566, 0.637, 0.658, 0.541, 0.55, 0.014, 0.557, 0.591, 0.558, 0.474, 0.52, 0.535, 0.645, 0.489, 0.576, 0.522, 0.548, 0.833]}, {"mode": "lines", "name": "roads_and_bridges", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "buildings", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.008, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01, 0.004, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.004, 0.004, 0.002, 0.002, 0.0, 0.006, 0.009, 0.007, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.001, 0.002, 0.002, 0.0, 0.0, 0.0, 0.0, 0.009, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.007, 0.011, 0.0, 0.0, 0.0, 0.0]}, {"mode": "lines", "name": "shake_intensity", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.78, 0.868, 0.868, 0.862, 0.861, 0.859, 0.825, 0.876, 0.812, 0.851, 0.932, 0.792, 0.894, 0.882, 0.307, 0.225, 0.106, 0.18, 0.251, 0.416, 0.56, 0.704, 0.748, 0.823, 0.75, 0.831, 0.914, 0.85, 0.888, 0.817, 0.899, 0.867, 0.82, 0.879, 0.844, 0.775, 0.843, 0.804, 0.854, 0.856, 0.789, 0.83, 0.787, 0.829, 0.838, 0.788, 0.826, 0.793, 0.756, 0.81, 0.865, 0.812, 0.887, 0.822, 0.77, 0.891, 0.053, 0.047, 0.035, 0.031, 0.046, 0.085, 0.158, 0.264, 0.292, 0.416, 0.539, 0.675, 0.74, 0.734, 0.786, 0.052, 0.865, 0.026, 0.835, 0.861, 0.059, 0.863, 0.839, 0.886, 0.803, 0.054, 0.802, 0.86, 0.785, 0.835, 0.835, 0.087, 0.111, 0.128, 0.229, 0.333, 0.442, 0.528, 0.625, 0.691, 0.774, 0.857, 0.078, 0.796, 0.849, 0.789, 0.843, 0.771, 0.841, 0.822, 0.811, 0.8, 0.036, 0.807, 0.817, 0.85, 0.821, 0.95, 0.802, 0.787, 0.809, 0.837, 0.756, 0.839, 0.667]}, {"mode": "lines", "name": "sewer_and_water", "type": "scatter", "x": ["2020-04-06 00:00:00", "2020-04-06 01:00:00", "2020-04-06 02:00:00", "2020-04-06 03:00:00", "2020-04-06 04:00:00", "2020-04-06 05:00:00", "2020-04-06 06:00:00", "2020-04-06 07:00:00", "2020-04-06 08:00:00", "2020-04-06 09:00:00", "2020-04-06 10:00:00", "2020-04-06 11:00:00", "2020-04-06 12:00:00", "2020-04-06 13:00:00", "2020-04-06 14:00:00", "2020-04-06 15:00:00", "2020-04-06 16:00:00", "2020-04-06 17:00:00", "2020-04-06 18:00:00", "2020-04-06 19:00:00", "2020-04-06 20:00:00", "2020-04-06 21:00:00", "2020-04-06 22:00:00", "2020-04-06 23:00:00", "2020-04-07 00:00:00", "2020-04-07 01:00:00", "2020-04-07 02:00:00", "2020-04-07 03:00:00", "2020-04-07 04:00:00", "2020-04-07 05:00:00", "2020-04-07 06:00:00", "2020-04-07 07:00:00", "2020-04-07 08:00:00", "2020-04-07 09:00:00", "2020-04-07 10:00:00", "2020-04-07 11:00:00", "2020-04-07 12:00:00", "2020-04-07 13:00:00", "2020-04-07 14:00:00", "2020-04-07 15:00:00", "2020-04-07 16:00:00", "2020-04-07 17:00:00", "2020-04-07 18:00:00", "2020-04-07 19:00:00", "2020-04-07 20:00:00", "2020-04-07 21:00:00", "2020-04-07 22:00:00", "2020-04-07 23:00:00", "2020-04-08 00:00:00", "2020-04-08 01:00:00", "2020-04-08 02:00:00", "2020-04-08 03:00:00", "2020-04-08 04:00:00", "2020-04-08 05:00:00", "2020-04-08 06:00:00", "2020-04-08 07:00:00", "2020-04-08 08:00:00", "2020-04-08 09:00:00", "2020-04-08 10:00:00", "2020-04-08 11:00:00", "2020-04-08 12:00:00", "2020-04-08 13:00:00", "2020-04-08 14:00:00", "2020-04-08 15:00:00", "2020-04-08 16:00:00", "2020-04-08 17:00:00", "2020-04-08 18:00:00", "2020-04-08 19:00:00", "2020-04-08 20:00:00", "2020-04-08 21:00:00", "2020-04-08 22:00:00", "2020-04-08 23:00:00", "2020-04-09 00:00:00", "2020-04-09 01:00:00", "2020-04-09 02:00:00", "2020-04-09 03:00:00", "2020-04-09 04:00:00", "2020-04-09 05:00:00", "2020-04-09 06:00:00", "2020-04-09 07:00:00", "2020-04-09 08:00:00", "2020-04-09 09:00:00", "2020-04-09 10:00:00", "2020-04-09 11:00:00", "2020-04-09 12:00:00", "2020-04-09 13:00:00", "2020-04-09 14:00:00", "2020-04-09 15:00:00", "2020-04-09 16:00:00", "2020-04-09 17:00:00", "2020-04-09 18:00:00", "2020-04-09 19:00:00", "2020-04-09 20:00:00", "2020-04-09 21:00:00", "2020-04-09 22:00:00", "2020-04-09 23:00:00", "2020-04-10 00:00:00", "2020-04-10 01:00:00", "2020-04-10 02:00:00", "2020-04-10 03:00:00", "2020-04-10 04:00:00", "2020-04-10 05:00:00", "2020-04-10 06:00:00", "2020-04-10 07:00:00", "2020-04-10 08:00:00", "2020-04-10 09:00:00", "2020-04-10 10:00:00", "2020-04-10 11:00:00", "2020-04-10 12:00:00", "2020-04-10 13:00:00", "2020-04-10 14:00:00", "2020-04-10 15:00:00", "2020-04-10 16:00:00", "2020-04-10 17:00:00", "2020-04-10 18:00:00", "2020-04-10 19:00:00", "2020-04-10 20:00:00", "2020-04-10 21:00:00", "2020-04-10 22:00:00", "2020-04-10 23:00:00", "2020-04-11 00:00:00"], "y": [0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.008, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01, 0.004, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.011, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.004, 0.004, 0.002, 0.002, 0.0, 0.006, 0.009, 0.007, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.001, 0.002, 0.002, 0.0, 0.0, 0.0, 0.0, 0.009, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.007, 0.011, 0.0, 0.0, 0.0, 0.0]}];
- Plotly.newPlot("missingRateChart", traceData, {
-  title: "Changes in the missing rate of each indicator over time",
-  xaxis: { title: "Time" },
-  yaxis: { title: "Missing rate (0~1)", range: [0, 1] },
-  height: 500
-}, {
-  displaylogo: false 
-});
- 
-</script>
-
-<h2>5. Temporal Trend Analysis of Individual Indicators</h2>
-<p>We conducted a focused analysis on the hourly trends of <code>power</code> and <code>buildings</code>, visualized alongside the number of submitted reports.</p>
-<ul>
-  <li>The first peak occurred in the early hours of April 8, corresponding to the mainshock event.</li>
-  <li>The second, smaller peak appeared on the morning of April 9, possibly indicating an aftershock or delayed reporting effect.</li>
-  <li>The mean value of <code>power</code> rose to 6.8 before gradually declining; simultaneously, <code>buildings</code> exhibited a marked increase, trending in parallel with <code>shake_intensity</code>.</li>
-</ul>
+    <h2>5. Temporal Trend Analysis of Individual Indicators</h2>
+    <p>We conducted a focused analysis on the hourly trends of <code>power</code> and <code>buildings</code>, visualized alongside the number of submitted reports.</p>
+    <ul>
+    <li>The first peak occurred in the early hours of April 8, corresponding to the mainshock event.</li>
+    <li>The second, smaller peak appeared on the morning of April 9, possibly indicating an aftershock or delayed reporting effect.</li>
+    <li>The mean value of <code>power</code> rose to 6.8 before gradually declining; simultaneously, <code>buildings</code> exhibited a marked increase, trending in parallel with <code>shake_intensity</code>.</li>
+    </ul>
 
 
 
-<a href="image1.png" target="_blank">
-  <img src="image1.png" alt="Hourly Trend" style="width: 90%; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; padding: 8px;">
+    <a href="image1.png" target="_blank">
+    <img src="image1.png" alt="Hourly Trend" style="width: 90%; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; padding: 8px;">
 
 
-</a>
+    </a>
 
 
-<p>The severity trends of two disaster indicators, <code>power</code> and <code>buildings</code>, were compared over the period from April 6 to April 9. Overall, these two curves exhibit synchronous or closely aligned fluctuations at certain time points. Periods with high values indicate relatively severe disaster impact, while low-value intervals suggest partial recovery or reduced damage. Notably, both indicators showed a significant surge around April 8, suggesting that the mainshock severely affected both the power infrastructure and buildings.</p>
+    <p>The severity trends of two disaster indicators, <code>power</code> and <code>buildings</code>, were compared over the period from April 6 to April 9. Overall, these two curves exhibit synchronous or closely aligned fluctuations at certain time points. Periods with high values indicate relatively severe disaster impact, while low-value intervals suggest partial recovery or reduced damage. Notably, both indicators showed a significant surge around April 8, suggesting that the mainshock severely affected both the power infrastructure and buildings.</p>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="powerBuildingsChart" height="400"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <canvas id="powerBuildingsChart" height="400"></canvas>
 
-<script>
-const ctx = document.getElementById('powerBuildingsChart').getContext('2d');
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [
-      "04-06 00", "04-06 01", "04-06 02", "04-06 03", "04-06 04", "04-06 05", "04-06 06", "04-06 07", "04-06 08", "04-06 09",
-      "04-06 10", "04-06 11", "04-06 12", "04-06 13", "04-06 14", "04-06 15", "04-06 16", "04-06 17", "04-06 18", "04-06 19",
-      "04-06 20", "04-06 21", "04-06 22", "04-06 23", "04-07 00", "04-07 01", "04-07 02", "04-07 03", "04-07 04", "04-07 05",
-      "04-07 06", "04-07 07", "04-07 08", "04-07 09", "04-07 10", "04-07 11", "04-07 12", "04-07 13", "04-07 14", "04-07 15",
-      "04-07 16", "04-07 17", "04-07 18", "04-07 19", "04-07 20", "04-07 21", "04-07 22", "04-07 23", "04-08 00", "04-08 01",
-      "04-08 02", "04-08 03", "04-08 04", "04-08 05", "04-08 06", "04-08 07", "04-08 08", "04-08 09", "04-08 10", "04-08 11",
-      "04-08 12", "04-08 13", "04-08 14", "04-08 15", "04-08 16", "04-08 17", "04-08 18", "04-08 19", "04-08 20", "04-08 21",
-      "04-08 22", "04-08 23", "04-09 00"
-    ],
-    datasets: [
-      {
-        label: "Power issues",
-        data: [
-          4.86, 5.75, 5.68, 5.74, 5.55, 5.48, 5.92, 5.77, 5.89, 5.65, 5.35, 5.87, 2.53, 1.91, 1.02, 2.64, 2.88, 3.62, 4.68, 5.33,
-          5.46, 5.61, 5.57, 5.41, 4.93, 4.65, 4.88, 5.33, 5.55, 5.79, 5.69, 5.91, 5.81, 5.46, 5.86, 5.57, 5.76, 5.9, 5.7, 5.92,
-          6.1, 5.77, 5.86, 5.49, 5.46, 5.38, 5.23, 5.41, 5.86, 5.63, 5.48, 5.54, 5.65, 5.84, 6.13, 6.05, 6.02, 5.14, 5.16, 5.39,
-          6.83, 6.14, 5.26, 5.17, 5.18, 5.24, 5.26, 5.32, 5.43, 5.44, 5.36, 8.48
+    <script>
+    const ctx = document.getElementById('powerBuildingsChart').getContext('2d');
+    new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [
+        "04-06 00", "04-06 01", "04-06 02", "04-06 03", "04-06 04", "04-06 05", "04-06 06", "04-06 07", "04-06 08", "04-06 09",
+        "04-06 10", "04-06 11", "04-06 12", "04-06 13", "04-06 14", "04-06 15", "04-06 16", "04-06 17", "04-06 18", "04-06 19",
+        "04-06 20", "04-06 21", "04-06 22", "04-06 23", "04-07 00", "04-07 01", "04-07 02", "04-07 03", "04-07 04", "04-07 05",
+        "04-07 06", "04-07 07", "04-07 08", "04-07 09", "04-07 10", "04-07 11", "04-07 12", "04-07 13", "04-07 14", "04-07 15",
+        "04-07 16", "04-07 17", "04-07 18", "04-07 19", "04-07 20", "04-07 21", "04-07 22", "04-07 23", "04-08 00", "04-08 01",
+        "04-08 02", "04-08 03", "04-08 04", "04-08 05", "04-08 06", "04-08 07", "04-08 08", "04-08 09", "04-08 10", "04-08 11",
+        "04-08 12", "04-08 13", "04-08 14", "04-08 15", "04-08 16", "04-08 17", "04-08 18", "04-08 19", "04-08 20", "04-08 21",
+        "04-08 22", "04-08 23", "04-09 00"
         ],
-        borderColor: "red",
-        backgroundColor: "rgba(255,0,0,0.2)",
-        tension: 0.3,
-        pointStyle: 'circle',
-        pointRadius: 4,
-        pointBackgroundColor: 'red'
-      },
-      {
-        label: "Building damage",
-        data: [
-          5.03, 5.86, 6.06, 6.01, 5.91, 5.7, 6.07, 5.83, 5.84, 5.6, 5.36, 5.94, 3.23, 2.9, 2.64, 3.43, 3.86, 4.23, 4.97, 5.39,
-          5.54, 5.47, 5.61, 5.53, 5.07, 5.15, 5.68, 5.62, 5.5, 5.64, 5.57, 5.84, 6.35, 6.17, 5.49, 5.46, 5.72, 5.33, 5.08, 5.29,
-          5.41, 5.41, 5.25, 5.31, 5.32, 5.15, 5.11, 5.1, 5.62, 5.66, 5.38, 5.35, 5.48, 5.35, 5.52, 5.33, 5.11, 4.58, 4.55, 4.45,
-          3.79, 3.87, 4.06, 4.45, 4.61, 4.89, 5.2, 5.49, 5.81, 5.89, 7.42
-        ],
-        borderColor: "blue",
-        backgroundColor: "rgba(0,0,255,0.2)",
-        tension: 0.3,
-        pointStyle: 'rect',
-        pointRadius: 4,
-        pointBackgroundColor: 'blue'
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "【4/6 - 4/8】Power issues & building damage severity varies over time",
-        font: {
-          size: 16
-        }
-      },
-      legend: {
-        labels: {
-          font: {
-            size: 12
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: false,
-        title: {
-          display: true,
-          text: "damage severity (0-10)"
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: "time"
+        datasets: [
+        {
+            label: "Power issues",
+            data: [
+            4.86, 5.75, 5.68, 5.74, 5.55, 5.48, 5.92, 5.77, 5.89, 5.65, 5.35, 5.87, 2.53, 1.91, 1.02, 2.64, 2.88, 3.62, 4.68, 5.33,
+            5.46, 5.61, 5.57, 5.41, 4.93, 4.65, 4.88, 5.33, 5.55, 5.79, 5.69, 5.91, 5.81, 5.46, 5.86, 5.57, 5.76, 5.9, 5.7, 5.92,
+            6.1, 5.77, 5.86, 5.49, 5.46, 5.38, 5.23, 5.41, 5.86, 5.63, 5.48, 5.54, 5.65, 5.84, 6.13, 6.05, 6.02, 5.14, 5.16, 5.39,
+            6.83, 6.14, 5.26, 5.17, 5.18, 5.24, 5.26, 5.32, 5.43, 5.44, 5.36, 8.48
+            ],
+            borderColor: "red",
+            backgroundColor: "rgba(255,0,0,0.2)",
+            tension: 0.3,
+            pointStyle: 'circle',
+            pointRadius: 4,
+            pointBackgroundColor: 'red'
         },
-        ticks: {
-          maxTicksLimit: 15,
-          autoSkip: true
+        {
+            label: "Building damage",
+            data: [
+            5.03, 5.86, 6.06, 6.01, 5.91, 5.7, 6.07, 5.83, 5.84, 5.6, 5.36, 5.94, 3.23, 2.9, 2.64, 3.43, 3.86, 4.23, 4.97, 5.39,
+            5.54, 5.47, 5.61, 5.53, 5.07, 5.15, 5.68, 5.62, 5.5, 5.64, 5.57, 5.84, 6.35, 6.17, 5.49, 5.46, 5.72, 5.33, 5.08, 5.29,
+            5.41, 5.41, 5.25, 5.31, 5.32, 5.15, 5.11, 5.1, 5.62, 5.66, 5.38, 5.35, 5.48, 5.35, 5.52, 5.33, 5.11, 4.58, 4.55, 4.45,
+            3.79, 3.87, 4.06, 4.45, 4.61, 4.89, 5.2, 5.49, 5.81, 5.89, 7.42
+            ],
+            borderColor: "blue",
+            backgroundColor: "rgba(0,0,255,0.2)",
+            tension: 0.3,
+            pointStyle: 'rect',
+            pointRadius: 4,
+            pointBackgroundColor: 'blue'
         }
-      }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+        title: {
+            display: true,
+            text: "【4/6 - 4/8】Power issues & building damage severity varies over time",
+            font: {
+            size: 16
+            }
+        },
+        legend: {
+            labels: {
+            font: {
+                size: 12
+            }
+            }
+        }
+        },
+        scales: {
+        y: {
+            beginAtZero: false,
+            title: {
+            display: true,
+            text: "damage severity (0-10)"
+            }
+        },
+        x: {
+            title: {
+            display: true,
+            text: "time"
+            },
+            ticks: {
+            maxTicksLimit: 15,
+            autoSkip: true
+            }
+        }
+        }
     }
-  }
-});
-</script>
+    });
+    </script>
 
+<!--6-11-->
+    <h2>6. Multi-Indicator Global Trend and Disaster Evolution Chart</h2>
+    <p><strong>A number of disaster indicators (power, buildings, road and water damage, shake intensity) and the number of citizen reports</strong> are plotted together on the same timeline, with points in time between the main shock and aftershocks. It can be seen:</p>
+    <ul>
+        <li>There is a <strong>significant peak</strong>  in all types of disaster indicators and the number of reports <strong>around 8 April</strong>, corresponding to the severe damage and concentration of reports due to the main earthquake.</li>
+        <li>There are also relatively significant fluctuations during the <strong>aftershock period</strong>, but the magnitude is usually smaller than that of the mainshock.</li>
+        <li>Different indicators show different trends of rising, falling or sustained high levels before and after the earthquake, suggesting that the extent of damage and recovery in various areas are not entirely synchronised.</li>
+    </ul>
+    <div id="chart6" style="width: 100%; height: 600px;"></div>
+    <script>
+
+        fetch("data_6.json")
+            .then(response => response.json())
+            .then(json => {
+                const data = json.data;
+                const annotations = json.annotations;
+
+                const times = data.map(d => new Date(d.time));
+
+                // 各項指標的數據
+                const traces = [
+                    { y: data.map(d => d.power), name: "Avg Power Damage", line: { color: "red" } },
+                    { y: data.map(d => d.buildings), name: "Avg Building Damage", line: { color: "blue" } },
+                    { y: data.map(d => d.shake_intensity), name: "Avg Shake Intensity", line: { color: "green" } },
+                    { y: data.map(d => d.roads_and_bridges), name: "Avg Roads/Bridges Damage", line: { color: "orange" } },
+                    { y: data.map(d => d.sewer_and_water), name: "Avg Sewer/Water Damage", line: { color: "purple" } }
+                ].map(trace => ({
+                    x: times,
+                    ...trace,
+                    mode: "lines"
+                }));
+
+                // 歸一化報告數量並繪製
+                const normalizedReportCounts = data.map(d => d.report_count / Math.max(...data.map(d => d.report_count)) * 10);
+                traces.push({
+                    x: times,
+                    y: normalizedReportCounts,
+                    name: "Normalized Report Count",
+                    type: "scatter",
+                    mode: "lines",
+                    line: { color: "black", dash: "dash" }
+                });
+
+                // 添加震後時間標註
+                const annotationMarkers = annotations.map(event => ({
+                    x: new Date(event.time),
+                    y: Math.max(...data.map(d => d.power)),  // 設置標記位置
+                    text: event.event,
+                    showarrow: true,
+                    arrowhead: 2,
+                    ax: 0,
+                    ay: -40,
+                    font: { color: "brown" },
+                    arrowcolor: "brown"
+                }));
+
+                // 設定圖表布局
+                const layout = {
+                    title: "Global Event Progression: Comprehensive Multi-Indicator Analysis",
+                    xaxis: { title: "Time", type: "date" },
+                    yaxis: { title: "Average Damage / Normalized Report Count" },
+                    legend: { x: 0, y: 1 },
+                    annotations: annotationMarkers,
+                    shapes: [
+                        {
+                            type: 'line',
+                            x0: new Date("2020-04-08 03:00:00"),
+                            x1: new Date("2020-04-08 03:00:00"),
+                            y0: 0,
+                            y1: Math.max(...data.map(d => d.power)),
+                            line: { color: 'grey', dash: 'dash', width: 2 }
+                        },
+                        {
+                            type: 'line',
+                            x0: new Date("2020-04-09 06:00:00"),
+                            x1: new Date("2020-04-09 06:00:00"),
+                            y0: 0,
+                            y1: Math.max(...data.map(d => d.power)),
+                            line: { color: 'brown', dash: 'dash', width: 2 }
+                        }
+                    ]
+                };
+
+                // 畫圖
+                Plotly.newPlot("chart6", traces, layout);
+            })
+            .catch(error => console.error("❌ 加載數據時出錯:", error));
+
+    </script>
+
+    <h2>7. Disaster Indicator Correlation Heatmap</h2>
+    <p>This heat map shows the correlation between different disaster indicators:</p>
+    <ul>
+        <li>Red areas indicate that two indicators are positively correlated, i.e. when one indicator rises, the other tends to rise as well;</li>
+        <li>Blue or light-coloured areas indicate a weak or even negative correlation;</li>
+        <li>Overall, it helps us identify which indicators tend to change at the same time and which are more independent, providing a data basis for subsequent disaster response decisions.</li>
+    </ul>
+    <p>As shown in the figure, building damage and healthcare are positively correlated, while other indicators such as water and electricity are relatively independent.</p>
+    <div id="chart7" style="width: 630px; height: 550px;"></div>
+    <script>
+        // 從 JSON 文件加載數據
+        fetch("data_7.json")
+            .then(response => response.json())
+            .then(data => {
+                var trace = {
+                    z: data.z,  // 相關係數數據
+                    x: data.x,  // X 軸標籤
+                    y: data.y,  // Y 軸標籤
+                    type: "heatmap",
+                    colorscale: "RdBu", 
+    //                 colorscale: [
+    //     [0, "blue"],    // -1 → 藍色
+    //     [0.5, "white"], //  0 → 白色
+    //     [1, "red"]      //  1 → 紅色
+    // ],
+                    colorbar: {
+                        title: "Correlation",  // 色階條標題
+                        tickvals: [-1, -0.5, 0, 0.5, 1],  // 指定色階刻度值
+                        ticktext: ["-1", "-0.5", "0", "0.5", "1"] // 對應標籤
+                    }
+                };
+
+                var layout = {
+                    title: "Heatmap of Correlation Between Disaster Indicators",
+                    yaxis: { autorange: "reversed", automargin: true } 
+                    // xaxis: { title: "Indicators" },
+                    // yaxis: { title: "Indicators" }
+                };
+
+                Plotly.newPlot("chart7", [trace], layout);
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+    </script>
+
+
+    <h2>8. Single Indicator Spatial Distribution Analysis</h2>
+    <ul>
+    <li></li>
+    </ul>
+
+    <h2>9. Comprehensive Disaster Severity Scoring (Unweighted & Weighted)</h2>
+    <p>
+        <strong>Overview</strong><br>
+        This visualisation displays the severity scores of different communities based on multiple disaster indicators.
+    </p>
+    <ul>
+        <li><strong>Communities 3 and 7</strong> stand out with the highest severity scores, indicating more severe and widespread damage. These areas should be prioritised for emergency response and resource allocation.</li>
+        <li><strong>Community 6</strong>and other communities on the right side show lower scores, suggesting relatively minor damage and lower urgency for large-scale aid.</li>
+        <li><strong>The remaining communities</strong> fall in between and vary in severity. Resource allocation can be planned according to their ranking.</li>
+    </ul>
+    <p>
+        <strong>Weighted Evaluation</strong><br>
+        After adjusting the weights of each indicator, the severity scores are recalculated.
+        We prioritised power and building damage by setting their weights to 2.0, followed by roads & bridges and medical services at 1.5, and finally water systems and shake intensity at 1.0.
+        This helps reflect more realistic priorities when planning rescue and support efforts.
+    </p>
+    <div id="weight-controls">
+        <p style="font-size: 0.9em; color: gray;">
+            Adjust the weights below to prioritise specific factors. Click "Update" to apply changes.
+          </p>
+          <label>Power: <input type="number" id="weight_power" value="1.0" step="0.1"></label>
+          <label>Buildings: <input type="number" id="weight_buildings" value="1.0" step="0.1"></label>
+          <label>Roads & Bridges: <input type="number" id="weight_roads_and_bridges" value="1.0" step="0.1"></label>
+          <label>Medical: <input type="number" id="weight_medical" value="1.0" step="0.1"></label>
+          <label>Sewer & Water: <input type="number" id="weight_sewer_and_water" value="1.0" step="0.1"></label>
+          <label>Shake Intensity: <input type="number" id="weight_shake_intensity" value="1.0" step="0.1"></label>
+          <div>
+            <button onclick="applySuggestedWeights()">Apply Suggested Weights</button>
+            <button onclick="resetWeights()">Reset Weights to 1.0</button>
+            <button onclick="updateChart()">Update</button>
+          </div>
+    </div>
+    <div id="chart9" style="width: 100%; height: 600px;"></div>
+    <script>
+        let rawDataGlobal = []; // 暫存原始資料
+        let columnsGlobal = [];
+
+
+        fetch("data_9.json")
+            .then(response => response.json())
+            .then(jsonData => {
+                columnsGlobal = jsonData.columns; // 取出所有災情指標
+                rawDataGlobal = jsonData.data;    // 取出所有地點數據
+                
+                // 計算未加權的 avg_severity
+                rawDataGlobal.forEach(d => {
+                d.avg_severity = columnsGlobal.reduce((sum, key) => sum + d[key], 0) / columnsGlobal.length;
+                });
+
+                // 畫圖
+                plotBarChart(rawDataGlobal, "avg_severity");
+            });
+
+        function plotBarChart(data, key) {
+            const sorted = [...data].sort((a, b) => b[key] - a[key]);
+
+            const locations = sorted.map(d => d.location);
+            const values = sorted.map(d => d[key]);
+
+            const trace = {
+                x: locations,
+                y: values,
+                type: "bar",
+                marker: { color: "salmon" }
+            };
+
+            const layout = {
+                title: "Disaster Severity Scores by Community",
+                xaxis: { title: "Community", tickvals: locations, type: 'category' },
+                yaxis: { title: "Severity Score"}
+            };
+
+            Plotly.newPlot("chart9", [trace], layout);
+        }
+
+        function updateChart() {
+            fetch("data_9.json")
+                .then(response => response.json())
+                .then(jsonData => {
+                    // const columns = jsonData.columns;
+                    // const rawData = jsonData.data;
+
+                    // 讀取使用者輸入的權重
+                    const weights = {};
+                    columnsGlobal.forEach(key => {
+                        weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
+                    });
+
+                    // 計算加權綜合受灾评分
+                    rawDataGlobal.forEach(d => {
+                        let totalWeight = 0;
+                        let weightedSum = 0;
+
+                        columnsGlobal.forEach(key => {
+                            totalWeight += weights[key];
+                            weightedSum += d[key] * weights[key];
+                        });
+
+                        d.weighted_score = weightedSum / totalWeight;
+                    });
+
+                    plotBarChart(rawDataGlobal, "weighted_score");
+                });
+        }
+        function applySuggestedWeights() {
+            const suggested = {
+                power: 2.0,
+                buildings: 2.0,
+                roads_and_bridges: 1.5,
+                medical: 1.5,
+                sewer_and_water: 1.0,
+                shake_intensity: 1.0
+            };
+
+            for (let key in suggested) {
+                document.getElementById("weight_" + key).value = suggested[key];
+            }
+        }
+
+        function resetWeights() {
+            const keys = [
+                "power", "buildings", "roads_and_bridges",
+                "medical", "sewer_and_water", "shake_intensity"
+            ];
+
+            keys.forEach(key => {
+                document.getElementById("weight_" + key).value = 1.0;
+            });
+        }
+    </script>
+
+
+    <h2>10. Nuclear Power Plant Region Specialized Analysis (Location 4)</h2>
+    <ul>
+    <li></li>
+    </ul>
+    
+    <h2>11. Key Findings Summary and Action Recommendations</h2>
+    <ul>
+    <li></li>
+    </ul>
 
 </div>
 
-<script>

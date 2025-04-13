@@ -1,0 +1,202 @@
+{
+    "columns": [
+        "sewer_and_water",
+        "power",
+        "roads_and_bridges",
+        "medical",
+        "buildings",
+        "shake_intensity"
+    ],
+    "data": [
+        {
+            "location": 1,
+            "sewer_and_water": 4.740072202166065,
+            "power": 4.759326113116727,
+            "roads_and_bridges": 4.8676293622142,
+            "medical": 4.974729241877256,
+            "buildings": 4.904933814681107,
+            "shake_intensity": 0.8646209386281588,
+            "avg_severity": 4.185218612113919
+        },
+        {
+            "location": 2,
+            "sewer_and_water": 3.413543599257885,
+            "power": 4.313543599257885,
+            "roads_and_bridges": 4.779777365491651,
+            "medical": 5.0,
+            "buildings": 1.9601113172541744,
+            "shake_intensity": 1.6280148423005565,
+            "avg_severity": 3.5158317872603586
+        },
+        {
+            "location": 3,
+            "sewer_and_water": 7.275434059844847,
+            "power": 8.461396379756188,
+            "roads_and_bridges": 7.267085334318434,
+            "medical": 7.0552641300332475,
+            "buildings": 5.8319911340967865,
+            "shake_intensity": 4.874547469523458,
+            "avg_severity": 6.794286417928827
+        },
+        {
+            "location": 4,
+            "sewer_and_water": 5.468653648509764,
+            "power": 4.224049331963001,
+            "roads_and_bridges": 4.213771839671121,
+            "medical": 5.423076923076923,
+            "buildings": 3.6920178143199727,
+            "shake_intensity": 4.649194929770469,
+            "avg_severity": 4.611794081218542
+        },
+        {
+            "location": 5,
+            "sewer_and_water": 4.205263157894737,
+            "power": 5.065497076023392,
+            "roads_and_bridges": 4.083625730994152,
+            "medical": 2.110526315789474,
+            "buildings": 3.4947368421052634,
+            "shake_intensity": 0.7380116959064328,
+            "avg_severity": 3.282943469785575
+        },
+        {
+            "location": 6,
+            "sewer_and_water": 2.937974683544304,
+            "power": 3.062974683544304,
+            "roads_and_bridges": 3.318987341772152,
+            "medical": 3.306012658227848,
+            "buildings": 3.516139240506329,
+            "shake_intensity": 1.1022151898734178,
+            "avg_severity": 2.8740506329113926
+        },
+        {
+            "location": 7,
+            "sewer_and_water": 6.028901734104046,
+            "power": 7.838150289017341,
+            "roads_and_bridges": 5.91907514450867,
+            "medical": 6.0,
+            "buildings": 5.011560693641618,
+            "shake_intensity": 4.682080924855492,
+            "avg_severity": 5.913294797687861
+        },
+        {
+            "location": 8,
+            "sewer_and_water": 7.499748002015984,
+            "power": 7.4577723378212974,
+            "roads_and_bridges": 7.65829073367413,
+            "medical": 5.174468085106383,
+            "buildings": 5.781985744114047,
+            "shake_intensity": 1.6561307509539924,
+            "avg_severity": 5.871399275614305
+        },
+        {
+            "location": 9,
+            "sewer_and_water": 7.456002728512961,
+            "power": 5.726352887676216,
+            "roads_and_bridges": 6.591291496134606,
+            "medical": 5.184970441109595,
+            "buildings": 6.1684856753069575,
+            "shake_intensity": 1.0724192814915872,
+            "avg_severity": 5.3665870850386534
+        },
+        {
+            "location": 10,
+            "sewer_and_water": 5.676909173068233,
+            "power": 7.6181653863533665,
+            "roads_and_bridges": 5.950293718933574,
+            "medical": 4.8,
+            "buildings": 6.351558969724356,
+            "shake_intensity": 1.624039765024853,
+            "avg_severity": 5.336827835517397
+        },
+        {
+            "location": 11,
+            "sewer_and_water": 6.289029535864979,
+            "power": 7.6951476793248945,
+            "roads_and_bridges": 4.981715893108298,
+            "medical": 3.8442334739803092,
+            "buildings": 4.963783403656821,
+            "shake_intensity": 2.590014064697609,
+            "avg_severity": 5.060654008438819
+        },
+        {
+            "location": 12,
+            "sewer_and_water": 3.182789488882472,
+            "power": 5.58619693907017,
+            "roads_and_bridges": 4.039849841178169,
+            "medical": 5.326923076923077,
+            "buildings": 3.14034074501877,
+            "shake_intensity": 4.440369621715276,
+            "avg_severity": 4.286078285464655
+        },
+        {
+            "location": 13,
+            "sewer_and_water": 3.8898858075040783,
+            "power": 3.2438825448613375,
+            "roads_and_bridges": 4.1590538336052205,
+            "medical": 4.0,
+            "buildings": 4.041598694942904,
+            "shake_intensity": 2.7911908646003263,
+            "avg_severity": 3.687601957585645
+        },
+        {
+            "location": 14,
+            "sewer_and_water": 6.125836055374086,
+            "power": 6.256494011510344,
+            "roads_and_bridges": 6.2723596204697465,
+            "medical": 4.741176470588235,
+            "buildings": 4.724062840255094,
+            "shake_intensity": 3.481567895473635,
+            "avg_severity": 5.266916148945191
+        },
+        {
+            "location": 15,
+            "sewer_and_water": 3.534573905688306,
+            "power": 3.14125607950941,
+            "roads_and_bridges": 3.5770776062592513,
+            "medical": 5.533333333333333,
+            "buildings": 3.0803552548107422,
+            "shake_intensity": 2.1621907379995773,
+            "avg_severity": 3.5047978196001033
+        },
+        {
+            "location": 16,
+            "sewer_and_water": 5.1828298887122415,
+            "power": 3.6273449920508742,
+            "roads_and_bridges": 4.171383147853736,
+            "medical": 3.6149443561208265,
+            "buildings": 3.349443561208267,
+            "shake_intensity": 1.0467408585055644,
+            "avg_severity": 3.498781134075252
+        },
+        {
+            "location": 17,
+            "sewer_and_water": 1.9102489866821077,
+            "power": 5.89171974522293,
+            "roads_and_bridges": 5.874348581354951,
+            "medical": 4.588235294117647,
+            "buildings": 3.294151708164447,
+            "shake_intensity": 1.6711059640995947,
+            "avg_severity": 3.8716350466069467
+        },
+        {
+            "location": 18,
+            "sewer_and_water": 3.3564356435643563,
+            "power": 6.025962596259626,
+            "roads_and_bridges": 4.056985698569857,
+            "medical": 4.550724637681159,
+            "buildings": 4.980858085808581,
+            "shake_intensity": 3.5566556655665567,
+            "avg_severity": 4.421270387908356
+        },
+        {
+            "location": 19,
+            "sewer_and_water": 2.7485148514851487,
+            "power": 2.9122112211221123,
+            "roads_and_bridges": 2.887788778877888,
+            "medical": 5.2272727272727275,
+            "buildings": 3.54983498349835,
+            "shake_intensity": 1.980858085808581,
+            "avg_severity": 3.2177467746774675
+        }
+    ]
+}
