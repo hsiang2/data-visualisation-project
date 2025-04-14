@@ -443,19 +443,19 @@
                 // 畫圖
                 Plotly.newPlot("chart6", traces, layout);
             })
-            .catch(error => console.error("❌ 加載數據時出錯:", error));
+            .catch(error => console.error("Error loading JSON:", error));
 
     </script>
 
     <h2>7. Disaster Indicator Correlation Heatmap</h2>
     <p>This heat map shows the correlation between different disaster indicators:</p>
     <ul>
-        <li>Red areas indicate that two indicators are positively correlated, i.e. when one indicator rises, the other tends to rise as well;</li>
-        <li>Blue or light-coloured areas indicate a weak or even negative correlation;</li>
+        <li>Red areas indicate that two indicators are positively correlated, i.e. when one indicator rises, the other tends to rise as well.</li>
+        <li>Blue or light-coloured areas indicate a weak or even negative correlation.</li>
         <li>Overall, it helps us identify which indicators tend to change at the same time and which are more independent, providing a data basis for subsequent disaster response decisions.</li>
     </ul>
     <p>As shown in the figure, building damage and healthcare are positively correlated, while other indicators such as water and electricity are relatively independent.</p>
-    <div id="chart7" style="width: 630px; height: 550px;"></div>
+    <div id="chart7" style="width: 600px; height: 500px;"></div>
     <script>
         // 從 JSON 文件加載數據
         fetch("data_7.json")
@@ -492,14 +492,152 @@
     </script>
 
 
-    <h2>8. Single Indicator Spatial Distribution Analysis</h2>
+    <h2>8. Analysis of Individual Indicators: Power, Shaking & Correlation</h2>
+    <h3>Electricity Damage Across Communities</h3>
+    <p>
+        There are clear differences in the severity of power problems between communities:
+    </p>
     <ul>
-    <li></li>
+        <li><strong>Communities 3, 7, and 11</strong> face the most severe issues (avg. 7-8).</li>
+        <li><strong>Communities like 19</strong> report milder impacts.</li>
+        <li>These gaps suggest that recovery efforts should prioritise the hardest-hit areas.</li>
+    </ul>
+    <div id="chart8-1" style="width: 100%; height: 450px;"></div>
+
+    <h3>Earthquake Intensity Variability Within Communities</h3>
+    <p>
+        This box plot highlights shaking intensity reports in five high-impact communities (3, 7, 4, 12, 18):
+    </p>
+    <ul>
+        <li><strong>Median values (horizontal lines in boxes)</strong><br>
+            Community 3 had the highest median (~5), while Community 18 was lower (~3), but all fall within the high-intensity category.</li>
+        <li><strong>Variability (box and whisker range)</strong><br>
+            All communities showed wide internal variation, with values ranging from about 1 to 9.</li>
+        <li><strong>Outliers (dots)</strong><br>
+            Each community had reports above 8, showing the presence of extreme individual experiences.</li>
     </ul>
 
-    <h2>9. Comprehensive Disaster Severity Scoring (Unweighted & Weighted)</h2>
+    <div id="chart8-2" style="width: 100%; height: 500px;"></div>
+    <h3>Relationship Between Earthquake Intensity and Power Issues</h3>
     <p>
-        <strong>Overview</strong><br>
+        This 2D histogram shows how reported shaking intensity (x-axis) relates to the severity of power issues (y-axis), with brighter colours indicating more frequent report combinations:
+    </p>
+    <ul>
+        <li><strong>Most frequent range</strong><br>
+            Reports are concentrated in the moderate shaking (2–4) and moderate power issues (3–5) range, suggesting these often co-occur.</li>
+        <li><strong>High-intensity cases</strong><br>
+            At high shaking levels (>7), the severity of power issues varies widely. Such cases are less common, possibly due to the rarity of extreme events or underreporting.</li>
+        <li><strong>No clear trend</strong><br>
+            The distribution does not follow a strong diagonal pattern, indicating that stronger shaking does not necessarily lead to more severe power issues.</li>
+    </ul>
+    
+    <div id="chart8-3" style="width: 600px; height: 500px;"></div>
+    <script>
+        fetch("data_8.json")
+            .then(res => res.json())
+            .then(data => {
+                // 圖一：電力問題嚴重度（長條圖）
+                const sortedPowerData = data.power_bar.sort((a, b) => b.power - a.power);
+                const locations1 = sortedPowerData.map(d => d.location.toString());
+                const powers = sortedPowerData.map(d => d.power);
+
+
+                Plotly.newPlot("chart8-1", [{
+                    x: locations1,
+                    y: powers,
+                    type: "bar",
+                    marker: { color: "salmon" }
+                }], {
+                    title: "Average severity of electricity problems in each community",
+                    xaxis: { title: "Community", tickangle: -45, tickvals: locations1, type: 'category' },
+                    yaxis: { title: "Average power problem" },
+                    margin: { t: 60 }
+                });
+
+                // 圖二：震感強度（Top 5 社區箱型圖）
+                const boxGroups = {};
+                data.shake_box.forEach(d => {
+                    const key = d.location.toString();
+                    if (!boxGroups[key]) boxGroups[key] = [];
+                    boxGroups[key].push(d.shake_intensity);
+                });
+                const top5order = [3, 7, 4, 12, 18].map(String);
+
+                const boxTraces = top5order.map(loc => ({
+                    y: boxGroups[loc],
+                    name: loc,
+                    type: "box",
+                    boxpoints: "outliers",
+                    marker: { color: "#F28E2B" }
+                }));
+
+                Plotly.newPlot("chart8-2", boxTraces, {
+                    title: "Distribution of earthquake intensity (Top 5 communities)",
+                    xaxis: {
+                        title: "Community",
+                        tickvals: top5order,
+                        ticktext: top5order,
+                        type: 'category'
+                    },
+                    yaxis: {
+                        title: "Earthquake intensity",
+                        range: [0, 10]
+                    },
+                    margin: { t: 60 },
+                    showlegend: false, 
+                });
+
+
+               
+
+                // const boxTraces = Object.entries(boxGroups).map(([loc, values]) => ({
+                //     y: values,
+                //     name: loc,
+                //     type: "box",
+                //     boxpoints: "outliers",
+                //     marker: { color: "#F28E2B" }
+                // }));
+
+                // Plotly.newPlot("chart8-2", boxTraces, {
+                //     title: "Distribution of earthquake intensity (Top 5 communities)",
+                //     xaxis: { title: "Communities (location)" },
+                //     yaxis: { title: "Earthquake intensity", range: [0, 10] },
+                //     margin: { t: 60 }
+                // });
+            
+                // 圖三：2D 直方圖（熱力圖）
+                const shakeVals = data.hist2d.map(d => d.shake_intensity);
+                const powerVals = data.hist2d.map(d => d.power);
+
+                Plotly.newPlot("chart8-3", [{
+                    x: shakeVals,
+                    y: powerVals,
+                    type: "histogram2d",
+                    colorscale: [
+                        [0, "#0d0887"],
+                        [0.2, "#6a00a8"],
+                        [0.4, "#cb4679"],
+                        [0.6, "#f89441"],
+                        [0.8, "#f0f921"],
+                        [1, "#ffffe0"]
+                    ],
+                    nbinsx: 11,
+                    nbinsy: 11,
+                    xbins: { start: 0, end: 10, size: 1 },
+                    ybins: { start: 0, end: 10, size: 1 },
+                    colorbar: { title: "Count" }
+                }], {
+                    title: "Severity of power issues vs. intensity of earthquakes felt",
+                    xaxis: { title: "Earthquake intensity", range: [0, 10] },
+                    yaxis: { title: "Power damage", range: [0, 10] },
+                    margin: { t: 60 }
+                });
+            })
+    </script>
+
+    <h2>9. Comprehensive Disaster Severity Scoring (Unweighted & Weighted)</h2>
+    <h3>Overview</h3>
+    <p>
         This visualisation displays the severity scores of different communities based on multiple disaster indicators.
     </p>
     <ul>
@@ -507,8 +645,8 @@
         <li><strong>Community 6</strong>and other communities on the right side show lower scores, suggesting relatively minor damage and lower urgency for large-scale aid.</li>
         <li><strong>The remaining communities</strong> fall in between and vary in severity. Resource allocation can be planned according to their ranking.</li>
     </ul>
+    <h3>Weighted Evaluation</h3>
     <p>
-        <strong>Weighted Evaluation</strong><br>
         After adjusting the weights of each indicator, the severity scores are recalculated.
         We prioritised power and building damage by setting their weights to 2.0, followed by roads & bridges and medical services at 1.5, and finally water systems and shake intensity at 1.0.
         This helps reflect more realistic priorities when planning rescue and support efforts.
@@ -731,14 +869,113 @@
 
 
     <h2>10. Nuclear Power Plant Region Specialized Analysis (Location 4)</h2>
+    <p>
+        Between 6 and 9 April, both power issues (red line) and shaking intensity (green line) in the nuclear power plant area fluctuated frequently, but not always synchronously. Summary:
+    </p>
     <ul>
-    <li></li>
+        <li>
+            <strong>Frequent Power Fluctuations</strong><br>
+            Power problems peaked at certain times (e.g., morning of 6 April, around 8 April), which could be due to repeated outages, repairs, or delayed reporting.
+        </li>
+        <li>
+            <strong>Shaking and Power Not Always Aligned</strong><br>
+            Although shaking intensity also peaked, it did not always coincide with the timing of power issues. This suggests that other factors, such as equipment age or network vulnerability, may have contributed.
+        </li>
+        <li>
+            <strong>High-Risk Area</strong><br>
+            The nuclear power plant supplies 72% of the city’s electricity. Any instability here can have significant consequences, highlighting the need for stronger monitoring and more resources for emergency response.
+        </li>
     </ul>
-    
-    <h2>11. Key Findings Summary and Action Recommendations</h2>
-    <ul>
-    <li></li>
-    </ul>
+    <div id="chart10" style="width: 100%; height: 500px;"></div>
+    <script>
+         fetch('data_10.json')
+            .then(response => response.json())
+            .then(data => {
+                const power_trace = {
+                    x: data.time,
+                    y: data.power,
+                    mode: 'lines+markers',
+                    name: 'Average Power Problem',
+                    line: {color: 'red'}
+                };
 
+                const shake_trace = {
+                    x: data.time,
+                    y: data.shake,
+                    mode: 'lines+markers',
+                    name: 'Average Earthquake Intensity',
+                    line: {color: 'green'}
+                };
+
+                const layout = {
+                    title: 'Changes of Key Indicators of Nuclear Power Plant Area (Location 4) Over Time',
+                    xaxis: {title: 'Time'},
+                    yaxis: {title: 'Average Severity (0-10)'},
+                    showlegend: true
+                };
+
+                const graphData = [power_trace, shake_trace];
+
+                Plotly.newPlot('chart10', graphData, layout);
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+    </script>
+    
+    <h2>11. Key Findings and Suggested Actions</h2>
+    <h3>Key Findings</h3>
+    <ul>
+        <li>
+            <strong>Severely Affected Areas: </strong>
+            Communities 3, 7, and 11 show the highest damage, with significant fluctuations in power issues at Location 4 (nuclear power plant).
+        </li>
+        <li>
+            <strong>Data Quality Variance: </strong>
+            While most community data is complete, some areas have high reporting gaps in roads, water, and medical services,  leading to uncertainty.
+        </li>
+        <li>
+            <strong>Time-Series Characteristics: </strong>
+            Reports peaked around April 8, clearly reflecting the main earthquake and aftershock periods.
+        </li>
+    </ul>
+    <h3>Recommended Actions</h3>
+    <ul>
+        <li>
+            <strong>Priority Rescue: </strong>
+           <ul>
+                <li>
+                    <strong>Communities 3, 7, 11: </strong>Severe damage, high overall risk—immediate deployment of rescue teams and emergency medical resources is required.
+                </li>
+                <li>
+                    <strong>Location 4 (Nuclear Plant Area): </strong>Power system fluctuations pose a risk of city-wide blackouts—strengthen monitoring and deploy dedicated repair teams, ensuring continuous communication with the plant’s operational departments.
+                </li>
+           </ul>
+        </li>
+        <li>
+            <strong>On-Site Verification: </strong>
+            Rapid field verification is needed in areas with significant data gaps to ensure decisions are based on accurate, real-time information.
+        </li>
+        <li>
+            <strong>Real-Time Monitoring & Forecasting:</strong>
+            <ul>
+                <li>Establish a dashboard to monitor critical indicators with pre-defined alert thresholds for early detection.</li>
+                <li>Use short-term forecasting models to predict aftershocks and other changes, allowing for timely adjustments to rescue strategies.</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>Future Improvements</h3>
+    <ul>
+        <li>
+            <strong>Data Source Integration: </strong>
+            Incorporate additional data sources such as sensors, social media, and satellite imagery to improve data accuracy.
+        </li>
+        <li>
+            <strong>Report System Optimization: </strong>
+            Enhance the disaster reporting system to reduce data gaps and improve consistency.
+        </li>
+        <li>
+            <strong>Emergency Plans Enhancement: </strong>
+           Develop specialised rescue plans targeting the nuclear power plant area and other key affected zones.
+        </li>
+    </ul>
 </div>
 
