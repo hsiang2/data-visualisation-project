@@ -190,11 +190,12 @@
     const annotations = [];
     for (let i = 0; i < yLabels.length; i++) {
         for (let j = 0; j < xLabels.length; j++) {
+        const fontColor = heatmapZ[i][j] < 0.5 ? 'white' : 'black';
         annotations.push({
             x: xLabels[j],
             y: yLabels[i],
             text: String(heatmapZ[i][j]),
-            font: { color: 'black', size: 12 },
+            font: { color: fontColor, size: 12 },
             showarrow: false
         });
         }
@@ -252,11 +253,54 @@
     <li>The second, smaller peak appeared on the morning of April 9, possibly indicating an aftershock or delayed reporting effect.</li>
     <li>The mean value of <code>power</code> rose to 6.8 before gradually declining; simultaneously, <code>buildings</code> exhibited a marked increase, trending in parallel with <code>shake_intensity</code>.</li>
     </ul>
+    <div id="chart5" style="width: 100%; height: 500px;"></div>
+    <script>
+
+        fetch("data_5.json")
+            .then(response => response.json())
+            .then(data => {
+                const times = data.time;
+                const reportCounts = data.report_count;
+
+                const trace = {
+                    x: times,
+                    y: reportCounts,
+                    mode: 'lines+markers',  // 添加线条和标记
+                    type: 'scatter',  // 使用散点图
+                    marker: {
+                        symbol: 'circle',  // 圆形标记
+                        color: 'blue'  // 标记颜色
+                    },
+                    line: {
+                        shape: 'linear',  // 使用线性连接点
+                        color: 'blue'  // 线条颜色
+                    }
+                };
+                
+                const layout = {
+                    title: "【4/6 - 4/8】The number of disaster reports changes over time",
+                    xaxis: {
+                        title: 'Time',
+                        tickformat: "%m-%d %H",
+                        dtick: 43200000,
+                         type: 'date'
+                    },
+                    yaxis: {
+                        title: 'Number of Reports'
+                    },
+                    showlegend: false  // 不显示图例
+                };
+
+                // 畫圖
+                Plotly.newPlot("chart5", [trace], layout);
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+
+    </script>
 
 
-
-    <a href="image1.png" target="_blank">
-    <img src="image1.png" alt="Hourly Trend" style="width: 90%; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; padding: 8px;">
+    <!-- <a href="image1.png" target="_blank">
+    <img src="image1.png" alt="Hourly Trend" style="width: 90%; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; padding: 8px;"> -->
 
 
     </a>
@@ -586,24 +630,6 @@
                     margin: { t: 60 },
                     showlegend: false, 
                 });
-
-
-               
-
-                // const boxTraces = Object.entries(boxGroups).map(([loc, values]) => ({
-                //     y: values,
-                //     name: loc,
-                //     type: "box",
-                //     boxpoints: "outliers",
-                //     marker: { color: "#F28E2B" }
-                // }));
-
-                // Plotly.newPlot("chart8-2", boxTraces, {
-                //     title: "Distribution of earthquake intensity (Top 5 communities)",
-                //     xaxis: { title: "Communities (location)" },
-                //     yaxis: { title: "Earthquake intensity", range: [0, 10] },
-                //     margin: { t: 60 }
-                // });
             
                 // 圖三：2D 直方圖（熱力圖）
                 const shakeVals = data.hist2d.map(d => d.shake_intensity);
@@ -694,20 +720,7 @@
             initMap(geoData);
             updateMap("avg_severity"); // 初始顯示 avg_severity
         })
-        // fetch("data_9.json")
-        //     .then(response => response.json())
-        //     .then(jsonData => {
-        //         columnsGlobal = jsonData.columns; // 取出所有災情指標
-        //         rawDataGlobal = jsonData.data;    // 取出所有地點數據
-                
-        //         // 計算未加權的 avg_severity
-        //         rawDataGlobal.forEach(d => {
-        //         d.avg_severity = columnsGlobal.reduce((sum, key) => sum + d[key], 0) / columnsGlobal.length;
-        //         });
 
-        //         // 畫圖
-        //         plotBarChart(rawDataGlobal, "avg_severity");
-        //     });
 
         function plotBarChart(data, key) {
             const sorted = [...data].sort((a, b) => b[key] - a[key]);
@@ -811,35 +824,6 @@
                 plotBarChart(rawDataGlobal, "weighted_score");
                 updateMap("weighted_score");
         }
-        // function updateChart() {
-        //     fetch("data_9.json")
-        //         .then(response => response.json())
-        //         .then(jsonData => {
-        //             // const columns = jsonData.columns;
-        //             // const rawData = jsonData.data;
-
-        //             // 讀取使用者輸入的權重
-        //             const weights = {};
-        //             columnsGlobal.forEach(key => {
-        //                 weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
-        //             });
-
-        //             // 計算加權綜合受灾评分
-        //             rawDataGlobal.forEach(d => {
-        //                 let totalWeight = 0;
-        //                 let weightedSum = 0;
-
-        //                 columnsGlobal.forEach(key => {
-        //                     totalWeight += weights[key];
-        //                     weightedSum += d[key] * weights[key];
-        //                 });
-
-        //                 d.weighted_score = weightedSum / totalWeight;
-        //             });
-
-        //             plotBarChart(rawDataGlobal, "weighted_score");
-        //         });
-        // }
         function applySuggestedWeights() {
             const suggested = {
                 power: 2.0,
