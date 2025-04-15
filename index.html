@@ -252,7 +252,7 @@
     <li>The second, smaller peak appeared on the morning of April 9, possibly indicating an aftershock or delayed reporting effect.</li>
     <li>The mean value of <code>power</code> rose to 6.8 before gradually declining; simultaneously, <code>buildings</code> exhibited a marked increase, trending in parallel with <code>shake_intensity</code>.</li>
     </ul>
-    <div id="chart5-1" style="width: 100%; height: 500px;"></div>
+    <div id="chart5-1" style="width: 100%; height: 450px;"></div>
     <script>
 
         fetch("data_5.json")
@@ -285,7 +285,8 @@
                          type: 'date'
                     },
                     yaxis: {
-                        title: 'Number of Reports'
+                        title: 'Number of Reports',
+                        dtick: 2000,
                     },
                     showlegend: false 
                 };
@@ -599,7 +600,7 @@
                     marker: { color: "salmon" }
                 }], {
                     title: "Average severity of electricity problems in each community",
-                    xaxis: { title: "Community", tickangle: -45, tickvals: locations1, type: 'category' },
+                    xaxis: { title: "Community", tickvals: locations1, type: 'category' },
                     yaxis: { title: "Average power problem" },
                     margin: { t: 60 }
                 });
