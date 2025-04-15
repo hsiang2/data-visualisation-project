@@ -255,7 +255,7 @@
     <div id="chart5-1" style="width: 100%; height: 450px;"></div>
     <script>
 
-        fetch("data_5.json")
+        fetch("data/data_5.json")
             .then(response => response.json())
             .then(data => {
                 const times = data.time;
@@ -407,7 +407,7 @@
     <div id="chart6" style="width: 100%; height: 540px;"></div>
     <script>
 
-        fetch("data_6.json")
+        fetch("data/data_6.json")
             .then(response => response.json())
             .then(json => {
                 const data = json.data;
@@ -509,7 +509,7 @@
     <p>As shown in the figure, building damage and healthcare are positively correlated, while other indicators such as water and electricity are relatively independent.</p>
     <div id="chart7" style="width: 600px; height: 500px;"></div>
     <script>
-        fetch("data_7.json")
+        fetch("data/data_7.json")
             .then(response => response.json())
             .then(data => {
                 var trace = {
@@ -584,7 +584,7 @@
     
     <div id="chart8-3" style="width: 600px; height: 500px;"></div>
     <script>
-        fetch("data_8.json")
+        fetch("data/data_8.json")
             .then(res => res.json())
             .then(data => {
                 // 圖一：電力問題嚴重度（長條圖）
@@ -724,8 +724,8 @@
         let map; // Leaflet 地圖物件
 
         Promise.all([
-            fetch("data_9.json").then(r => r.json()),
-            fetch("map.geo.json").then(r => r.json())
+            fetch("data/data_9.json").then(r => r.json()),
+            fetch("data/map.geo.json").then(r => r.json())
         ]).then(([jsonData, geoData]) => {
             columnsGlobal = jsonData.columns;
             rawDataGlobal = jsonData.data;
@@ -892,7 +892,7 @@
     </ul>
     <div id="chart10" style="width: 100%; height: 500px;"></div>
     <script>
-         fetch('data_10.json')
+         fetch('data/data_10.json')
             .then(response => response.json())
             .then(data => {
                 const power_trace = {
