@@ -517,24 +517,21 @@
                     x: data.x, 
                     y: data.y, 
                     type: "heatmap",
-                    // colorscale: "RdBu", 
                     colorscale: [
-                        [0, "#1a73e8"],    // -1 → 藍色
-                        [0.5, "#FFFCEF"], //  0 → 白色
-                        [1, "#F17F5F"]      //  1 → 紅色
+                        [0, "#1a73e8"],    
+                        [0.5, "#FFFCEF"], 
+                        [1, "#F17F5F"]    
                     ],
                     colorbar: {
-                        title: "Correlation",  // 色階條標題
-                        tickvals: [0.2, 0.4, 0.6, 0.8, 1],  // 指定色階刻度值
-                        ticktext: ["0.2", "0.4", "0.6", "0.8", "1"] // 對應標籤
+                        title: "Correlation", 
+                        tickvals: [0.2, 0.4, 0.6, 0.8, 1], 
+                        ticktext: ["0.2", "0.4", "0.6", "0.8", "1"] 
                     }
                 };
 
                 var layout = {
                     title: "Heatmap of Correlation Between Disaster Indicators",
                     yaxis: { autorange: "reversed", automargin: true } 
-                    // xaxis: { title: "Indicators" },
-                    // yaxis: { title: "Indicators" }
                 };
 
                 Plotly.newPlot("chart7", [trace], layout);
@@ -647,13 +644,6 @@
                     y: powerVals,
                     type: "histogram2d",
                     colorscale: [
-                        // [0, "#0d0887"],
-                        // [0.2, "#6a00a8"],
-                        // [0.4, "#cb4679"],
-                        // [0.6, "#f89441"],
-                        // [0.8, "#f0f921"],
-                        // [1, "#ffffe0"]
-                        
                         [0, "#475bb4"],    
                         [0.2, "#655fca"],  
                         [0.4, "#d66c8e"],   
@@ -718,10 +708,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script>
-        let rawDataGlobal = []; // 暫存原始資料
+        let rawDataGlobal = []; 
         let columnsGlobal = [];
-        let geoLayer = null; // 地圖圖層暫存
-        let map; // Leaflet 地圖物件
+        let geoLayer = null; 
+        let map; 
 
         Promise.all([
             fetch("data/data_9.json").then(r => r.json()),
@@ -730,15 +720,13 @@
             columnsGlobal = jsonData.columns;
             rawDataGlobal = jsonData.data;
 
-            // 計算 avg_severity
             rawDataGlobal.forEach(d => {
                 d.avg_severity = columnsGlobal.reduce((sum, key) => sum + d[key], 0) / columnsGlobal.length;
             });
 
-            // 初始化長條圖與地圖
             plotBarChart(rawDataGlobal, "avg_severity");
             initMap(geoData);
-            updateMap("avg_severity"); // 初始顯示 avg_severity
+            updateMap("avg_severity"); 
         })
 
 
@@ -748,7 +736,6 @@
             const locations = sorted.map(d => d.location);
             const values = sorted.map(d => d[key]);
 
-             // 使用 getColor 函數生成顏色陣列（與地圖一致）
             const barColors = sorted.map(d => getColor(d[key]));
 
             const trace = {
@@ -770,7 +757,7 @@
         }
 
         function initMap(geojson) {
-            map = L.map("map9").setView([0, 0], 13); // 之後會自動 fit bounds
+            map = L.map("map9").setView([0, 0], 13); 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors'
             }).addTo(map);
@@ -796,7 +783,6 @@
                 const match = rawDataGlobal.find(d => d.location === id);
                 const score = match ? match[key] : 0;
 
-                // 改變樣式
                 layer.setStyle({
                     fillColor: getColor(score),
                     fillOpacity: 0.7,
@@ -809,7 +795,6 @@
             })
         }
 
-        // 顏色比例
         function getColor(score) {
             return score > 7 ? "#800026" :
                     score > 6 ? "#BD0026" :
@@ -821,13 +806,11 @@
                                 "#FFEDA0";
         }
         function updateChart() {
-            // 讀取使用者輸入的權重
             const weights = {};
                 columnsGlobal.forEach(key => {
                     weights[key] = parseFloat(document.getElementById("weight_" + key).value) || 0;
             });
 
-            // 計算加權綜合评分
             rawDataGlobal.forEach(d => {
                 let totalWeight = 0;
                 let weightedSum = 0;
@@ -840,7 +823,6 @@
                 d.weighted_score = weightedSum / totalWeight;
             });
 
-            // 同步更新長條圖與地圖
             plotBarChart(rawDataGlobal, "weighted_score");
             updateMap("weighted_score");
         }
