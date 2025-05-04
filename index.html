@@ -417,19 +417,14 @@
 
                 const traces = [
                     { y: data.map(d => d.power), name: "Avg Power Damage", 
-                        // line: { color: "red" } 
                     },
                     { y: data.map(d => d.buildings), name: "Avg Building Damage", 
-                    // line: { color: "blue" } 
                     },
                     { y: data.map(d => d.shake_intensity), name: "Avg Shake Intensity", 
-                    // line: { color: "green" } 
                     },
                     { y: data.map(d => d.roads_and_bridges), name: "Avg Roads/Bridges Damage", 
-                    // line: { color: "orange" } 
                     },
                     { y: data.map(d => d.sewer_and_water), name: "Avg Sewer/Water Damage", 
-                    // line: { color: "purple" } 
                     }
                 ].map(trace => ({
                     x: times,
