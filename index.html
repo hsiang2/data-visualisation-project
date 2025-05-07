@@ -245,56 +245,74 @@
     
     </script>
 
-    <h2>5. Temporal Trend Analysis of Individual Indicators</h2>
-    <p>We conducted a focused analysis on the hourly trends of <code>power</code> and <code>buildings</code>, visualized alongside the number of submitted reports.</p>
-    <ul>
+<h2>5. Temporal Trend Analysis of Individual Indicators</h2>
+<p>We conducted a focused analysis on the hourly trends of <code>power</code> and <code>buildings</code>, visualized alongside the number of submitted reports.</p>
+<ul>
     <li>The first peak occurred in the early hours of April 8, corresponding to the mainshock event.</li>
     <li>The second, smaller peak appeared on the morning of April 9, possibly indicating an aftershock or delayed reporting effect.</li>
     <li>The mean value of <code>power</code> rose to 6.8 before gradually declining; simultaneously, <code>buildings</code> exhibited a marked increase, trending in parallel with <code>shake_intensity</code>.</li>
-    </ul>
-    <div id="chart5-1" style="width: 100%; height: 450px;"></div>
+</ul>
+
+<div id="chart5-1" style="width: 100%; height: 550px;"></div>
+
     <script>
-
-        fetch("data/data_5.json")
-            .then(response => response.json())
+        fetch("data/community_hourly_reports.json")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                const times = data.time;
-                const reportCounts = data.report_count;
+                const traces = data.traces;
 
-                const trace = {
-                    x: times,
-                    y: reportCounts,
-                    mode: 'lines+markers', 
-                    type: 'scatter',
-                    marker: {
-                        symbol: 'circle',
-                        color: '#1a73e8' 
-                    },
-                    line: {
-                        shape: 'linear', 
-                        color: '#1a73e8' 
-                    }
-                };
-                
+                const distinctColors = [
+                    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                    '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+                    '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5',
+                    '#c49c94', '#f7b6d2', '#c7c7c7', '#dbdb8d'
+                ];
+
+                traces.forEach((trace, idx) => {
+                    trace.x = trace.x.map(dateStr => new Date(dateStr));
+
+                    trace.mode = 'lines'; 
+                });
+
                 const layout = {
-                    title: "【4/6 - 4/8】The number of disaster reports changes over time",
+                    title: 'Hourly Report Counts for All Communities',
                     xaxis: {
                         title: 'Time',
-                        tickformat: "%m-%d %H",
-                        dtick: 43200000,
-                         type: 'date'
+                        type: 'date',
+                        tickformat: "%Y-%m-%d %H:%M",
                     },
                     yaxis: {
                         title: 'Number of Reports',
-                        dtick: 2000,
                     },
-                    showlegend: false 
+                    height: 550,
+                    hovermode: 'closest',
+                    colorway: distinctColors,
+
+                    legend: {
+                        title: { text: 'Community' },
+                        x: 1.02,
+                        y: 1,
+                        xanchor: 'left',
+                        yanchor: 'top',
+                        bgcolor: 'rgba(255,255,255,0.8)',
+                        bordercolor: '#CCCCCC',
+                        borderwidth: 1,
+                        font: { size: 10 }
+                    },
+                    margin: { r: 150 }
                 };
 
-                Plotly.newPlot("chart5-1", [trace], layout);
+                Plotly.newPlot("chart5-1", traces, layout, { responsive: true, displaylogo: false });
             })
-            .catch(error => console.error("Error loading JSON:", error));
-
+            .catch(error => {
+                console.error("Error loading or processing community hourly reports JSON:", error);
+                document.getElementById("chart5-1").innerHTML = `<p style="color: red; padding: 20px;">Error loading chart data: ${error.message}.</p>`;
+            });
     </script>
     <!-- <a href="image1.png" target="_blank">
     <img src="image1.png" alt="Hourly Trend" style="width: 90%; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; padding: 8px;"> -->
@@ -417,14 +435,19 @@
 
                 const traces = [
                     { y: data.map(d => d.power), name: "Avg Power Damage", 
+                        // line: { color: "red" } 
                     },
                     { y: data.map(d => d.buildings), name: "Avg Building Damage", 
+                    // line: { color: "blue" } 
                     },
                     { y: data.map(d => d.shake_intensity), name: "Avg Shake Intensity", 
+                    // line: { color: "green" } 
                     },
                     { y: data.map(d => d.roads_and_bridges), name: "Avg Roads/Bridges Damage", 
+                    // line: { color: "orange" } 
                     },
                     { y: data.map(d => d.sewer_and_water), name: "Avg Sewer/Water Damage", 
+                    // line: { color: "purple" } 
                     }
                 ].map(trace => ({
                     x: times,
@@ -494,48 +517,8 @@
 
     </script>
 
-    <h2>7. Disaster Indicator Correlation Heatmap</h2>
-    <p>This heat map shows the correlation between different disaster indicators:</p>
-    <ul>
-        <li>Red areas indicate that two indicators are positively correlated, i.e. when one indicator rises, the other tends to rise as well.</li>
-        <li>Blue or light-coloured areas indicate a weak or even negative correlation.</li>
-        <li>Overall, it helps us identify which indicators tend to change at the same time and which are more independent, providing a data basis for subsequent disaster response decisions.</li>
-    </ul>
-    <p>As shown in the figure, building damage and healthcare are positively correlated, while other indicators such as water and electricity are relatively independent.</p>
-    <div id="chart7" style="width: 580px; height: 470px;"></div>
-    <script>
-        fetch("data/data_7.json")
-            .then(response => response.json())
-            .then(data => {
-                var trace = {
-                    z: data.z,  
-                    x: data.x, 
-                    y: data.y, 
-                    type: "heatmap",
-                    colorscale: [
-                        [0, "#1a73e8"],    
-                        [0.5, "#FFFCEF"], 
-                        [1, "#F17F5F"]    
-                    ],
-                    colorbar: {
-                        title: "Correlation", 
-                        tickvals: [0.2, 0.4, 0.6, 0.8, 1], 
-                        ticktext: ["0.2", "0.4", "0.6", "0.8", "1"] 
-                    }
-                };
 
-                var layout = {
-                    title: "Heatmap of Correlation Between Disaster Indicators",
-                    yaxis: { autorange: "reversed", automargin: true } 
-                };
-
-                Plotly.newPlot("chart7", [trace], layout);
-            })
-            .catch(error => console.error("Error loading JSON:", error));
-    </script>
-
-
-    <h2>8. Analysis of Individual Indicators: Power, Shaking & Correlation</h2>
+    <h2>7. Analysis of Individual Indicators: Power, Shaking & Correlation</h2>
     <h3>Electricity Damage Across Communities</h3>
     <p>
         There are clear differences in the severity of power problems between communities:
@@ -660,7 +643,7 @@
             })
     </script>
 
-    <h2>9. Comprehensive Disaster Severity Scoring (Unweighted & Weighted)</h2>
+    <h2>8. Comprehensive Disaster Severity Scoring (Unweighted & Weighted)</h2>
     <h3>Overview</h3>
     <p>
         This visualisation displays the severity scores of different communities based on multiple disaster indicators.
@@ -849,7 +832,7 @@
     </script>
 
 
-    <h2>10. Nuclear Power Plant Region Specialized Analysis (Location 4)</h2>
+    <h2>9. Nuclear Power Plant Region Specialized Analysis (Location 4)</h2>
     <p>
         Between 6 and 9 April, both power issues (red line) and shaking intensity (green line) in the nuclear power plant area fluctuated frequently, but not always synchronously. Summary:
     </p>
@@ -903,13 +886,25 @@
             })
             .catch(error => console.error("Error loading JSON:", error));
     </script>
-    
-    <h2>11. Key Findings and Suggested Actions</h2>
-    <h3>Key Findings</h3>
+
+    <h2>10.Results</h2>
+    <h3>Q1: Emergency responders will base their initial response on the earthquake shake map. Use visual analytics to determine how their response should change based on damage reports from citizens on the ground. How would you prioritize neighborhoods for response? Which parts of the city are hardest hit?</h3>
+    <p>A1: By setting appropriate weights, users can determine the response priority for different communities based on the color intensity displayed on the Fig. "Disaster Severity Map by Community" ; darker colors indicate higher priority. This assessment is made more intuitive when viewed alongside the ranked order presented in the Fig. "Bar Chart of Disaster Severity Scores by Community" . According to the initially suggested weights, the resulting priority order for community response is as follows: 3, 8, 7, 10, 9, 14, 11, 18, 4, 1, 12, 17, 13, 2, 16, 15, 5, 19, 6.</p>
+
+    <h3>Q2: Use visual analytics to show uncertainty in the data. Compare the reliability of neighborhood reports. Which neighborhoods are providing reliable reports? Provide a rationale for your response.</h3>
+    <p>A2: With the introduction of reliability scores, the reliability ranking of each community can be observed on the Fig. "Bar chart of data reliability scores for each community" . For example, reports from location 3 are shown to be comparatively the most reliable. Furthermore, the Fig. "Heatmap of the completeness rate of each indicator in each community" reveals that, compared to other communities, location 7 exhibits significantly more missing data across various indicators, which consequently results in its lowest reliability score.</p>
+
+    <h3>Q3: How do conditions change over time? How does uncertainty in change over time? Describe the key changes you see.</h3>
+    <p>A3: The Fig. "Line Chart of Hourly Report Counts for All Communities" indicates that three distinct seismic events (earthquakes) occurred within the observed timeframe. The patterns suggest the second event was the strongest in intensity, while the first was the weakest. Furthermore, anomalies in the report volumes following the second and third earthquakes suggest that some communities experienced one or two instances of power disruption during these periods.</p>
+    <p>The Fig. "Changes in the Missing Rate of Each Indicator Over Time chart" illustrates the temporal variation in missing data rates for each indicator. It can be observed that the missing rate for <code>shake_intensity</code> significantly decreases in the periods immediately following seismic events, suggesting that residents are more likely to report this specific indicator after experiencing an earthquake. The missing rates for <code>buildings</code> and <code>sewer_and_water</code> consistently remained below 5% with minimal fluctuation, indicating a stable reporting pattern.</p>
+    <p>The Fig. "Multi-Indicator Disaster Trend & Report Evolution visualization" shows: There is a significant peak in all types of disaster indicators and the number of reports around 8 April, corresponding to the severe damage and concentration of reports due to the main earthquake. There are also relatively significant fluctuations during the aftershock period, but the magnitude is usually smaller than that of the mainshock.</p>
+
+    <h2>11. Other Findings and Future Improvements</h2>
+    <h3>Findings</h3>
     <ul>
         <li>
             <strong>Severely Affected Areas: </strong>
-            Communities 3, 7, and 11 show the highest damage, with significant fluctuations in power issues at Location 4 (nuclear power plant).
+            It shows significant fluctuations in power issues at Location 4 (nuclear power plant). Power system fluctuations pose a risk of city-wide blackouts. Monitoring should be strengthened and dedicated repair teams deployed, with continuous communication maintained with the plant’s operational departments.
         </li>
         <li>
             <strong>Data Quality Variance: </strong>
@@ -920,44 +915,19 @@
             Reports peaked around April 8, clearly reflecting the main earthquake and aftershock periods.
         </li>
     </ul>
-    <h3>Recommended Actions</h3>
-    <ul>
-        <li>
-            <strong>Priority Rescue: </strong>
-           <ul>
-                <li>
-                    <strong>Communities 3, 7, 11: </strong>Severe damage, high overall risk. Immediate deployment of rescue teams and emergency medical resources is required.
-                </li>
-                <li>
-                    <strong>Location 4 (Nuclear Plant Area): </strong>Power system fluctuations pose a risk of city-wide blackouts. Monitoring should be strengthened and dedicated repair teams deployed, with continuous communication maintained with the plant’s operational departments.
-                </li>
-           </ul>
-        </li>
-        <li>
-            <strong>On-Site Verification: </strong>
-            Rapid field verification is needed in areas with significant data gaps to ensure decisions are based on accurate, real-time information.
-        </li>
-        <li>
-            <strong>Real-Time Monitoring & Forecasting:</strong>
-            <ul>
-                <li>Establish a dashboard to monitor critical indicators with pre-defined alert thresholds for early detection.</li>
-                <li>Use short-term forecasting models to predict aftershocks and other changes, allowing for timely adjustments to rescue strategies.</li>
-            </ul>
-        </li>
-    </ul>
     <h3>Future Improvements</h3>
     <ul>
         <li>
-            <strong>Data Source Integration: </strong>
-            Incorporate additional data sources such as sensors, social media, and satellite imagery to improve data accuracy.
+            <strong>Handling Potential Collective Exaggeration:</strong><br>The issue of potential "collective exaggerated reporting" was not adequately addressed. As noted in related documentation (VAST 2019 - St. Himark - About Our City.docx), location 8, despite being relatively distant from the epicenter, reported higher damage levels than many closer locations. Considering the context that 'Many of the city’s elite and powerful call Scenic Vista [Location 8] home,' one hypothesis is that affluent residents may have a lower tolerance for damage, leading to subjectively inflated or non-objective reporting. This potential bias was not effectively isolated or adjusted for in our analysis. Significant time and effort were invested in exploring this, including analysing correlation coefficients and data variance, but these approaches did not yield satisfactory results in clearly distinguishing or explaining the anomalous reporting pattern of location 8.
         </li>
         <li>
-            <strong>Report System Optimization: </strong>
-            Enhance the disaster reporting system to reduce data gaps and improve consistency.
+            <strong>Reliability Score Limitations:</strong><br>The current reliability score, based solely on the average missing data rate per community, is limited in its scope and may not adequately capture the complexities of real-world data trustworthiness. Future iterations should consider additional dimensions (such as data variance, temporal consistency, or cross-validation with other sources) to create a more comprehensive and representative scoring system, thus improving its overall accuracy and applicability.
         </li>
         <li>
-            <strong>Emergency Plans Enhancement: </strong>
-           Develop specialised rescue plans targeting the nuclear power plant area and other key affected zones.
+            <strong>Handling Delayed Reporting:</strong><br>The analysis could not account for reporting delays caused by power outages. Several communities experienced periods with zero reports followed by a surge upon power restoration. It was impossible to determine the intended original submission times for these delayed reports. Access to additional information (e.g., outage duration, device offline times) that could allow for the temporal adjustment of these delayed reports would significantly reduce data noise and interference, thereby further enhancing the accuracy and practical utility of the analysis for decision support.
+        </li>
+        <li>
+            <strong>Basic Visualization Techniques:</strong><br>The types of visualizations employed in the current system are relatively foundational. Future enhancements could explore the use of more advanced visualization libraries or techniques to create more sophisticated and potentially more insightful interactive displays.
         </li>
     </ul>
 </div>
